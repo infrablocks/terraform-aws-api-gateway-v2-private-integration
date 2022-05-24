@@ -71,7 +71,7 @@ namespace :keys do
         name_prefix: 'gpg',
         owner_name: 'InfraBlocks Maintainers',
         owner_email: 'maintainers@infrablocks.io',
-        owner_comment: 'terraform-aws-api-gateway-v2 CI Key'
+        owner_comment: 'terraform-aws-api-gateway-v2-private-integration CI Key'
       )
     end
 
@@ -101,7 +101,8 @@ end
 
 RakeCircleCI.define_project_tasks(
   namespace: :circle_ci,
-  project_slug: 'github/infrablocks/terraform-aws-api-gateway-v2'
+  project_slug:
+    'github/infrablocks/terraform-aws-api-gateway-v2-private-integration'
 ) do |t|
   circle_ci_config =
     YAML.load_file('config/secrets/circle_ci/config.yaml')
@@ -127,7 +128,8 @@ end
 
 RakeGithub.define_repository_tasks(
   namespace: :github,
-  repository: 'infrablocks/terraform-aws-api-gateway-v2'
+  repository:
+    'infrablocks/terraform-aws-api-gateway-v2-private-integration'
 ) do |t, args|
   github_config =
     YAML.load_file('config/secrets/github/config.yaml')
