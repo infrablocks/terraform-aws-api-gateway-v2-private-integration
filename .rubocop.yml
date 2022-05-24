@@ -1,0 +1,33 @@
+require:
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+
+Layout/LineLength:
+  Max: 80
+
+Metrics/BlockLength:
+  IgnoredMethods:
+    - describe
+    - context
+    - shared_examples
+    - it
+  Exclude:
+    - Rakefile
+
+Style/Documentation:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 40
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
