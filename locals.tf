@@ -4,6 +4,7 @@ locals {
   vpc_link_subnet_ids                     = var.vpc_link_subnet_ids == null ? [] : var.vpc_link_subnet_ids
   vpc_link_default_ingress_cidrs          = var.vpc_link_default_ingress_cidrs == null ? ["0.0.0.0/0"] : var.vpc_link_default_ingress_cidrs
   vpc_link_default_egress_cidrs           = var.vpc_link_default_egress_cidrs == null ? ["0.0.0.0/0"] : var.vpc_link_default_egress_cidrs
+  route_key                               = var.route_key == null ? "ANY /{proxy+}" : var.route_key
   include_default_tags                    = var.include_default_tags == null ? true : var.include_default_tags
   include_vpc_link                        = var.include_vpc_link == null ? true : var.include_vpc_link
   include_vpc_link_default_security_group = var.include_vpc_link_default_security_group == null ? true : var.include_vpc_link_default_security_group

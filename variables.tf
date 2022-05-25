@@ -16,6 +16,12 @@ variable "integration_uri" {
   description = "The integration URI to use for the private integration, typically the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service."
 }
 
+variable "route_key" {
+  type = string
+  description = "The route key to use on the route created for this private integration. Required when `include_route` is `true`. Defaults to \"ANY /{proxy+}\""
+  default = "ANY /{proxy+}"
+}
+
 # Needs tests
 variable "vpc_id" {
   type        = string
