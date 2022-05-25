@@ -18,6 +18,7 @@ module "api_gateway" {
 
   tags = var.tags
 
-  include_default_tags = var.include_default_tags
-  include_vpc_link = var.include_vpc_link
+  include_default_tags                    = var.include_default_tags
+  include_vpc_link                        = var.include_vpc_link
+  include_vpc_link_default_security_group = var.include_vpc_link_default_security_group
 }

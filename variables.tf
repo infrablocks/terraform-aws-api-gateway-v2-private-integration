@@ -9,7 +9,7 @@ variable "deployment_identifier" {
 
 variable "vpc_id" {
   type        = string
-  description = "The ID of the VPC in which to create the VPC link for this private integration. Required when `include_vpc_link` and `include_vpc_link_security_group` are both `true`."
+  description = "The ID of the VPC in which to create the VPC link for this private integration. Required when `include_vpc_link` and `include_vpc_link_default_security_group` are both `true`."
   default     = ""
 }
 variable "vpc_link_subnet_ids" {
@@ -32,5 +32,10 @@ variable "include_default_tags" {
 variable "include_vpc_link" {
   type        = bool
   description = "Whether or not to create a VPC link for the private integration. Defaults to `true`."
+  default     = true
+}
+variable "include_vpc_link_default_security_group" {
+  type        = bool
+  description = "Whether or not to create a default security group for the VPC link for the private integration. Defaults to `true`."
   default     = true
 }

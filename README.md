@@ -1,11 +1,14 @@
-Terraform AWS API Gateway V2
-============================
+Terraform AWS API Gateway V2 Private Integration
+================================================
 
-[![CircleCI](https://circleci.com/gh/infrablocks/terraform-aws-api-gateway-v2/tree/main.svg?style=svg)](https://circleci.com/gh/infrablocks/terraform-aws-api-gateway-v2/tree/main)
+[![CircleCI](https://circleci.com/gh/infrablocks/terraform-aws-api-gateway-v2-private-integration/tree/main.svg?style=svg)](https://circleci.com/gh/infrablocks/terraform-aws-api-gateway-v2-private-integration/tree/main)
 
-A Terraform module for creating an AWS API Gateway using the V2 API.
+A Terraform module for creating an AWS API gateway private integration using the
+V2 API.
 
-The access control deployment has no requirements.
+The private integration deployment requires:
+* an existing API gateway
+* an existing VPC containing the target component with which to integrate
  
 The AWS API Gateway deployment consists of:
 * TODO
@@ -18,13 +21,13 @@ configuration:
 
 ```hcl-terraform
 module "api_gateway" {
-  source = "infrablocks/api-gateway-v2/aws"
+  source = "infrablocks/api-gateway-v2-private-integration/aws"
   version = "0.0.1"
 }
 ```
 
 See the 
-[Terraform registry entry](https://registry.terraform.io/modules/infrablocks/api-gateway-v2/aws/latest) 
+[Terraform registry entry](https://registry.terraform.io/modules/infrablocks/api-gateway-v2-private-integration/aws/latest) 
 for more details.
 
 ### Inputs
@@ -205,7 +208,7 @@ Contributing
 ------------
 
 Bug reports and pull requests are welcome on GitHub at 
-https://github.com/infrablocks/terraform-aws-api-gateway-v2. 
+https://github.com/infrablocks/terraform-aws-api-gateway-v2-private-integration. 
 This project is intended to be a safe, welcoming space for collaboration, and 
 contributors are expected to adhere to 
 the [Contributor Covenant](http://contributor-covenant.org) code of conduct.

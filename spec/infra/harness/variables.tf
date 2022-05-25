@@ -25,3 +25,7 @@ variable "include_vpc_link" {
   type    = bool
   default = null
 }
+variable "include_vpc_link_default_security_group" {
+  type    = bool
+  default = null
+}
