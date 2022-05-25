@@ -7,6 +7,15 @@ variable "deployment_identifier" {
   description = "An identifier for this instantiation."
 }
 
+variable "api_id" {
+  type = string
+  description = "The ID of the API gateway API for which to create the integration."
+}
+variable "integration_uri" {
+  type = string
+  description = "The integration URI to use for the private integration, typically the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service."
+}
+
 # Needs tests
 variable "vpc_id" {
   type        = string

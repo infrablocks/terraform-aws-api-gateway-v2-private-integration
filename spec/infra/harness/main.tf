@@ -6,12 +6,15 @@ data "terraform_remote_state" "prerequisites" {
   }
 }
 
-module "api_gateway" {
+module "private_integration" {
   # This makes absolutely no sense. I think there's a bug in terraform.
   source = "./../../../../../../../"
 
   component             = var.component
   deployment_identifier = var.deployment_identifier
+
+  api_id          = data.terraform_remote_state.prerequisites.outputs.api_id
+  integration_uri = data.terraform_remote_state.prerequisites.outputs.alb_listeners["default"].arn
 
   vpc_id              = var.vpc_id
   vpc_link_subnet_ids = var.vpc_link_subnet_ids
