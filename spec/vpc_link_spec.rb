@@ -81,4 +81,173 @@ describe 'VPC link' do
       expect(vpc_link).to(be_nil)
     end
   end
+
+  describe 'when include_vpc_link is true' do
+    before(:context) do
+      provision do |vars|
+        vars.merge(
+          include_vpc_link: true,
+          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_link_subnet_ids:
+            output_for(:prerequisites, 'private_subnet_ids')
+        )
+      end
+    end
+
+    it 'creates a VPC link in the subnets with the provided IDs' do
+      expect(vpc_link).not_to(be_nil)
+    end
+
+    # rubocop:disable RSpec/MultipleExpectations
+    it 'uses a name including the component and deployment identifier' do
+      expect(vpc_link.name).to(match(/.*#{vars.component}.*/))
+      expect(vpc_link.name).to(match(/.*#{vars.deployment_identifier}.*/))
+    end
+    # rubocop:enable RSpec/MultipleExpectations
+
+    it 'outputs the VPC link ID' do
+      expect(vpc_link.vpc_link_id).to(eq(output_vpc_link_id))
+    end
+
+    it 'uses the component and deployment identifier as tags' do
+      expect(vpc_link.tags)
+        .to(eq(
+              {
+                'Component' => vars.component,
+                'DeploymentIdentifier' => vars.deployment_identifier
+              }
+            ))
+    end
+  end
+
+  describe 'when tags are provided and include_default_tags is not provided' do
+    before(:context) do
+      provision do |vars|
+        vars.merge(
+          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_link_subnet_ids:
+            output_for(:prerequisites, 'private_subnet_ids'),
+          tags: { Alpha: 'beta', Gamma: 'delta' }
+        )
+      end
+    end
+
+    it 'includes the provided tags alongside the defaults' do
+      expect(vpc_link.tags)
+        .to(include(
+              {
+                'Component' => vars.component,
+                'DeploymentIdentifier' => vars.deployment_identifier,
+                'Alpha' => 'beta',
+                'Gamma' => 'delta'
+              }
+            ))
+    end
+  end
+
+  describe 'when tags are provided and include_default_tags is false' do
+    before(:context) do
+      provision do |vars|
+        vars.merge(
+          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_link_subnet_ids:
+            output_for(:prerequisites, 'private_subnet_ids'),
+          include_default_tags: false,
+          tags: { Alpha: 'beta', Gamma: 'delta' }
+        )
+      end
+    end
+
+    it 'includes the provided tags' do
+      expect(vpc_link.tags)
+        .to(include(
+              {
+                'Alpha' => 'beta',
+                'Gamma' => 'delta'
+              }
+            ))
+    end
+
+    it 'does not include the default tags' do
+      expect(vpc_link.tags)
+        .not_to(include(
+                  {
+                    'Component' => vars.component,
+                    'DeploymentIdentifier' => vars.deployment_identifier
+                  }
+                ))
+    end
+  end
+
+  describe 'when tags are provided and include_default_tags is true' do
+    before(:context) do
+      provision do |vars|
+        vars.merge(
+          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_link_subnet_ids:
+            output_for(:prerequisites, 'private_subnet_ids'),
+          include_default_tags: true,
+          tags: { Alpha: 'beta', Gamma: 'delta' }
+        )
+      end
+    end
+
+    it 'includes the provided tags alongside the defaults' do
+      expect(vpc_link.tags)
+        .to(include(
+              {
+                'Component' => vars.component,
+                'DeploymentIdentifier' => vars.deployment_identifier,
+                'Alpha' => 'beta',
+                'Gamma' => 'delta'
+              }
+            ))
+    end
+  end
+
+  describe 'when include_default_tags is false' do
+    before(:context) do
+      provision do |vars|
+        vars.merge(
+          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_link_subnet_ids:
+            output_for(:prerequisites, 'private_subnet_ids'),
+          include_default_tags: false
+        )
+      end
+    end
+
+    it 'does not include default tags' do
+      expect(vpc_link.tags)
+        .not_to(include(
+                  {
+                    'Component' => vars.component,
+                    'DeploymentIdentifier' => vars.deployment_identifier
+                  }
+                ))
+    end
+  end
+
+  describe 'when include_default_tags is true' do
+    before(:context) do
+      provision do |vars|
+        vars.merge(
+          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_link_subnet_ids:
+            output_for(:prerequisites, 'private_subnet_ids'),
+          include_default_tags: true
+        )
+      end
+    end
+
+    it 'includes default tags' do
+      expect(vpc_link.tags)
+        .to(include(
+              {
+                'Component' => vars.component,
+                'DeploymentIdentifier' => vars.deployment_identifier
+              }
+            ))
+    end
+  end
 end

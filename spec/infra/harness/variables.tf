@@ -29,3 +29,11 @@ variable "include_vpc_link_default_security_group" {
   type    = bool
   default = null
 }
+variable "include_vpc_link_default_ingress_rule" {
+  type    = bool
+  default = null
+}
+variable "include_vpc_link_default_egress_rule" {
+  type    = bool
+  default = null
+}

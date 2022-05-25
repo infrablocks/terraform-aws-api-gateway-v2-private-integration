@@ -9,13 +9,13 @@ resource "aws_security_group" "vpc_link" {
 }
 
 resource "aws_security_group_rule" "vpc_link_ingress" {
-  count = local.vpc_link_default_security_group_count
+  count = local.vpc_link_default_ingress_rule_count
 
   security_group_id = try(aws_security_group.vpc_link[0].id, null)
 
   type = "ingress"
 
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks = local.vpc_link_default_ingress_cidrs
 
   protocol = "tcp"
   from_port = 443
@@ -23,13 +23,13 @@ resource "aws_security_group_rule" "vpc_link_ingress" {
 }
 
 resource "aws_security_group_rule" "vpc_link_egress" {
-  count = local.vpc_link_default_security_group_count
+  count = local.vpc_link_default_egress_rule_count
 
   security_group_id = try(aws_security_group.vpc_link[0].id, null)
 
   type = "egress"
 
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks = local.vpc_link_default_egress_cidrs
 
   protocol = "all"
   from_port = -1
