@@ -15,9 +15,10 @@ describe 'VPC link' do
     api_gateway_v2_client.get_vpc_links.items
   end
 
-  let(:vpc_link) do
+  let(:created_vpc_link) do
     vpc_links
       .select { |link| link.subnet_ids.to_set == subnet_ids.to_set }
+      .reject { |link| link.name =~ /.*provided.*/ }
       .first
   end
 
@@ -43,22 +44,24 @@ describe 'VPC link' do
 
   describe 'by default' do
     it 'creates a VPC link in the subnets with the provided IDs' do
-      expect(vpc_link).not_to(be_nil)
+      expect(created_vpc_link).not_to(be_nil)
     end
 
     # rubocop:disable RSpec/MultipleExpectations
     it 'uses a name including the component and deployment identifier' do
-      expect(vpc_link.name).to(match(/.*#{vars.component}.*/))
-      expect(vpc_link.name).to(match(/.*#{vars.deployment_identifier}.*/))
+      expect(created_vpc_link.name)
+        .to(match(/.*#{vars.component}.*/))
+      expect(created_vpc_link.name)
+        .to(match(/.*#{vars.deployment_identifier}.*/))
     end
     # rubocop:enable RSpec/MultipleExpectations
 
     it 'outputs the VPC link ID' do
-      expect(vpc_link.vpc_link_id).to(eq(output_vpc_link_id))
+      expect(created_vpc_link.vpc_link_id).to(eq(output_vpc_link_id))
     end
 
     it 'uses the component and deployment identifier as tags' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .to(eq(
               {
                 'Component' => vars.component,
@@ -72,13 +75,14 @@ describe 'VPC link' do
     before(:context) do
       provision do |vars|
         vars.merge(
-          include_vpc_link: false
+          include_vpc_link: false,
+          vpc_link_id: output_for(:prerequisites, 'vpc_link_id')
         )
       end
     end
 
     it 'does not create a VPC link' do
-      expect(vpc_link).to(be_nil)
+      expect(created_vpc_link).to(be_nil)
     end
   end
 
@@ -95,22 +99,24 @@ describe 'VPC link' do
     end
 
     it 'creates a VPC link in the subnets with the provided IDs' do
-      expect(vpc_link).not_to(be_nil)
+      expect(created_vpc_link).not_to(be_nil)
     end
 
     # rubocop:disable RSpec/MultipleExpectations
     it 'uses a name including the component and deployment identifier' do
-      expect(vpc_link.name).to(match(/.*#{vars.component}.*/))
-      expect(vpc_link.name).to(match(/.*#{vars.deployment_identifier}.*/))
+      expect(created_vpc_link.name)
+        .to(match(/.*#{vars.component}.*/))
+      expect(created_vpc_link.name)
+        .to(match(/.*#{vars.deployment_identifier}.*/))
     end
     # rubocop:enable RSpec/MultipleExpectations
 
     it 'outputs the VPC link ID' do
-      expect(vpc_link.vpc_link_id).to(eq(output_vpc_link_id))
+      expect(created_vpc_link.vpc_link_id).to(eq(output_vpc_link_id))
     end
 
     it 'uses the component and deployment identifier as tags' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .to(eq(
               {
                 'Component' => vars.component,
@@ -133,7 +139,7 @@ describe 'VPC link' do
     end
 
     it 'includes the provided tags alongside the defaults' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .to(include(
               {
                 'Component' => vars.component,
@@ -159,7 +165,7 @@ describe 'VPC link' do
     end
 
     it 'includes the provided tags' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .to(include(
               {
                 'Alpha' => 'beta',
@@ -169,7 +175,7 @@ describe 'VPC link' do
     end
 
     it 'does not include the default tags' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .not_to(include(
                   {
                     'Component' => vars.component,
@@ -193,7 +199,7 @@ describe 'VPC link' do
     end
 
     it 'includes the provided tags alongside the defaults' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .to(include(
               {
                 'Component' => vars.component,
@@ -218,7 +224,7 @@ describe 'VPC link' do
     end
 
     it 'does not include default tags' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .not_to(include(
                   {
                     'Component' => vars.component,
@@ -241,7 +247,7 @@ describe 'VPC link' do
     end
 
     it 'includes default tags' do
-      expect(vpc_link.tags)
+      expect(created_vpc_link.tags)
         .to(include(
               {
                 'Component' => vars.component,

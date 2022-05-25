@@ -17,6 +17,7 @@ module "private_integration" {
   integration_uri = data.terraform_remote_state.prerequisites.outputs.alb_listeners["default"].arn
 
   vpc_id              = var.vpc_id
+  vpc_link_id         = var.vpc_link_id
   vpc_link_subnet_ids = var.vpc_link_subnet_ids
 
   tags = var.tags

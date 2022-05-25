@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-fdescribe 'integration' do
+describe 'integration' do
   let(:alb_listeners) do
     output_for(:prerequisites, 'alb_listeners')
   end
@@ -32,15 +32,15 @@ fdescribe 'integration' do
     end
   end
 
-  # after(:context) do
-  #   destroy do |vars|
-  #     vars.merge(
-  #       vpc_id: output_for(:prerequisites, 'vpc_id'),
-  #       vpc_link_subnet_ids:
-  #         output_for(:prerequisites, 'private_subnet_ids')
-  #     )
-  #   end
-  # end
+  after(:context) do
+    destroy do |vars|
+      vars.merge(
+        vpc_id: output_for(:prerequisites, 'vpc_id'),
+        vpc_link_subnet_ids:
+          output_for(:prerequisites, 'private_subnet_ids')
+      )
+    end
+  end
 
   describe 'by default' do
     it 'creates an integration' do

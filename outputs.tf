@@ -3,7 +3,7 @@ output "integration_id" {
 }
 
 output "vpc_link_id" {
-  value = try(aws_apigatewayv2_vpc_link.vpc_link[0].id, "")
+  value = try(aws_apigatewayv2_vpc_link.vpc_link[0].id, var.vpc_link_id)
 }
 
 output "vpc_link_default_security_group_id" {

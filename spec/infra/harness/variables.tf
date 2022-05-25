@@ -7,6 +7,10 @@ variable "vpc_id" {
   type    = string
   default = null
 }
+variable "vpc_link_id" {
+  type    = string
+  default = null
+}
 variable "vpc_link_subnet_ids" {
   type    = list(string)
   default = null

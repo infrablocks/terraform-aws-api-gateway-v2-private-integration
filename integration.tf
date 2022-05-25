@@ -1,6 +1,6 @@
 resource "aws_apigatewayv2_integration" "integration" {
   api_id = var.api_id
-  
+
   description = "Private integration for component: ${var.component} and deployment identifier: ${var.deployment_identifier}."
 
   integration_type = "HTTP_PROXY"

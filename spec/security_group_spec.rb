@@ -77,7 +77,8 @@ describe 'VPC link default security group' do
     before(:context) do
       provision do |vars|
         vars.merge(
-          include_vpc_link: false
+          include_vpc_link: false,
+          vpc_link_id: output_for(:prerequisites, 'vpc_link_id')
         )
       end
     end
@@ -93,7 +94,8 @@ describe 'VPC link default security group' do
       provision do |vars|
         vars.merge(
           include_vpc_link: false,
-          include_vpc_link_default_security_group: false
+          include_vpc_link_default_security_group: false,
+          vpc_link_id: output_for(:prerequisites, 'vpc_link_id')
         )
       end
     end
@@ -109,7 +111,8 @@ describe 'VPC link default security group' do
       provision do |vars|
         vars.merge(
           include_vpc_link: false,
-          include_vpc_link_default_security_group: true
+          include_vpc_link_default_security_group: true,
+          vpc_link_id: output_for(:prerequisites, 'vpc_link_id')
         )
       end
     end

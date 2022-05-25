@@ -8,11 +8,11 @@ variable "deployment_identifier" {
 }
 
 variable "api_id" {
-  type = string
+  type        = string
   description = "The ID of the API gateway API for which to create the integration."
 }
 variable "integration_uri" {
-  type = string
+  type        = string
   description = "The integration URI to use for the private integration, typically the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service."
 }
 
@@ -20,7 +20,12 @@ variable "integration_uri" {
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC in which to create the VPC link for this private integration. Required when `include_vpc_link` and `include_vpc_link_default_security_group` are both `true`."
-  default     = ""
+  default     = null
+}
+variable "vpc_link_id" {
+  type        = string
+  description = "The ID of a VPC link to use when creating the private integration. Only required if `include_vpc_link` is `false`."
+  default     = null
 }
 variable "vpc_link_subnet_ids" {
   type        = list(string)
