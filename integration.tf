@@ -8,5 +8,5 @@ resource "aws_apigatewayv2_integration" "integration" {
   integration_uri = var.integration_uri
 
   connection_type = "VPC_LINK"
-  connection_id = try(aws_apigatewayv2_vpc_link.vpc_link[0].id, null)
+  connection_id = try(aws_apigatewayv2_vpc_link.vpc_link[0].id, var.vpc_link_id)
 }
