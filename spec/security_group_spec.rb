@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-fdescribe 'VPC link default security group' do
+describe 'VPC link default security group' do
   let(:output_vpc_link_default_security_group_id) do
     output_for(:harness, 'vpc_link_default_security_group_id')
   end
@@ -163,8 +163,8 @@ fdescribe 'VPC link default security group' do
 
     it 'uses the component and deployment identifier as tags' do
       tags = vpc_link_default_security_group
-               .tags
-               .inject({}) { |acc, tag| acc.merge(tag.key => tag.value) }
+             .tags
+             .inject({}) { |acc, tag| acc.merge(tag.key => tag.value) }
 
       expect(tags)
         .to(eq(
@@ -240,8 +240,8 @@ fdescribe 'VPC link default security group' do
 
     it 'uses the component and deployment identifier as tags' do
       tags = vpc_link_default_security_group
-               .tags
-               .inject({}) { |acc, tag| acc.merge(tag.key => tag.value) }
+             .tags
+             .inject({}) { |acc, tag| acc.merge(tag.key => tag.value) }
 
       expect(tags)
         .to(eq(

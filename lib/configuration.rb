@@ -28,8 +28,7 @@ class Configuration
 
   def deployment_identifier_for(overrides)
     (overrides && overrides[:deployment_identifier]) ||
-      ENV['DEPLOYMENT_IDENTIFIER'] ||
-      @random_deployment_identifier
+      ENV.fetch('DEPLOYMENT_IDENTIFIER', @random_deployment_identifier)
   end
 
   def public_gpg_key_path
@@ -38,8 +37,7 @@ class Configuration
 
   def public_gpg_key_path_for(overrides)
     (overrides && overrides[:public_gpg_key_path]) ||
-      ENV['PUBLIC_GPG_KEY_PATH'] ||
-      @default_public_gpg_key_path
+      ENV.fetch('PUBLIC_GPG_KEY_PATH', @default_public_gpg_key_path)
   end
 
   def private_gpg_key_path
@@ -48,8 +46,7 @@ class Configuration
 
   def private_gpg_key_path_for(overrides)
     (overrides && overrides[:private_gpg_key_path]) ||
-      ENV['PRIVATE_GPG_KEY_PATH'] ||
-      @default_private_gpg_key_path
+      ENV.fetch('PRIVATE_GPG_KEY_PATH', @default_private_gpg_key_path)
   end
 
   def gpg_key_passphrase
@@ -58,8 +55,7 @@ class Configuration
 
   def gpg_key_passphrase_for(overrides)
     (overrides && overrides[:gpg_key_passphrase]) ||
-      ENV['GPG_KEY_PASSPHRASE'] ||
-      @default_gpg_key_passphrase
+      ENV.fetch('GPG_KEY_PASSPHRASE', @default_gpg_key_passphrase)
   end
 
   def project_directory
