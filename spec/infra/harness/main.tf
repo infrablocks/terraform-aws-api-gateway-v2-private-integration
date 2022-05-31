@@ -13,8 +13,9 @@ module "private_integration" {
   component             = var.component
   deployment_identifier = var.deployment_identifier
 
-  api_id          = data.terraform_remote_state.prerequisites.outputs.api_id
-  integration_uri = data.terraform_remote_state.prerequisites.outputs.alb_listeners["default"].arn
+  api_id                    = data.terraform_remote_state.prerequisites.outputs.api_id
+  integration_uri           = data.terraform_remote_state.prerequisites.outputs.alb_listeners["default"].arn
+  tls_server_name_to_verify = var.tls_server_name_to_verify
 
   vpc_id              = var.vpc_id
   vpc_link_id         = var.vpc_link_id
@@ -27,4 +28,5 @@ module "private_integration" {
   include_vpc_link_default_security_group = var.include_vpc_link_default_security_group
   include_vpc_link_default_ingress_rule   = var.include_vpc_link_default_ingress_rule
   include_vpc_link_default_egress_rule    = var.include_vpc_link_default_egress_rule
+  use_tls                                 = var.use_tls
 }

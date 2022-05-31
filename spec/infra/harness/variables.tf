@@ -3,6 +3,11 @@ variable "region" {}
 variable "component" {}
 variable "deployment_identifier" {}
 
+variable "tls_server_name_to_verify" {
+  type    = string
+  default = null
+}
+
 variable "vpc_id" {
   type    = string
   default = null
@@ -38,6 +43,10 @@ variable "include_vpc_link_default_ingress_rule" {
   default = null
 }
 variable "include_vpc_link_default_egress_rule" {
+  type    = bool
+  default = null
+}
+variable "use_tls" {
   type    = bool
   default = null
 }

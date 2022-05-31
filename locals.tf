@@ -10,6 +10,7 @@ locals {
   include_vpc_link_default_security_group = var.include_vpc_link_default_security_group == null ? true : var.include_vpc_link_default_security_group
   include_vpc_link_default_ingress_rule   = var.include_vpc_link_default_ingress_rule == null ? true : var.include_vpc_link_default_ingress_rule
   include_vpc_link_default_egress_rule    = var.include_vpc_link_default_egress_rule == null ? true : var.include_vpc_link_default_egress_rule
+  use_tls                                 = var.use_tls == null ? true : var.use_tls
 
   include_vpc_link_default_security_group_resolved = local.include_vpc_link == true && local.include_vpc_link_default_security_group == true
   include_vpc_link_default_ingress_rule_resolved   = local.include_vpc_link_default_security_group_resolved == true && local.include_vpc_link_default_ingress_rule == true

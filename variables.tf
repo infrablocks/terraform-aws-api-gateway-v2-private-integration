@@ -15,11 +15,16 @@ variable "integration_uri" {
   type        = string
   description = "The integration URI to use for the private integration, typically the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service."
 }
+variable "tls_server_name_to_verify" {
+  type        = string
+  description = "The server name of the target to verify for TLS communication. Only required when `use_tls` is `true`."
+  default     = null
+}
 
 variable "route_key" {
-  type = string
+  type        = string
   description = "The route key to use on the route created for this private integration. Required when `include_route` is `true`. Defaults to \"ANY /{proxy+}\""
-  default = "ANY /{proxy+}"
+  default     = "ANY /{proxy+}"
 }
 
 # Needs tests
@@ -80,5 +85,10 @@ variable "include_vpc_link_default_ingress_rule" {
 variable "include_vpc_link_default_egress_rule" {
   type        = bool
   description = "Whether or not to create the default egress rule on the security group created for the VPC link. Defaults to `true`."
+  default     = true
+}
+variable "use_tls" {
+  type        = bool
+  description = "Whether or not to use TLS when communicating with the target of this integration. Defaults to `true`."
   default     = true
 }
