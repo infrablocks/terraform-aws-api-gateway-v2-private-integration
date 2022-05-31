@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-fdescribe 'route' do
+describe 'route' do
   let(:output_route_id) do
     output_for(:harness, 'route_id')
   end
@@ -19,7 +19,7 @@ fdescribe 'route' do
       vars.merge(
         include_vpc_link: false,
         vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
-        tls_server_name_to_verify: 'example.com',
+        tls_server_name_to_verify: 'example.com'
       )
     end
   end
@@ -29,7 +29,7 @@ fdescribe 'route' do
       vars.merge(
         include_vpc_link: false,
         vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
-        tls_server_name_to_verify: 'example.com',
+        tls_server_name_to_verify: 'example.com'
       )
     end
   end
