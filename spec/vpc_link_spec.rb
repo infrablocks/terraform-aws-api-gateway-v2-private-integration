@@ -27,7 +27,8 @@ describe 'VPC link' do
       vars.merge(
         vpc_id: output_for(:prerequisites, 'vpc_id'),
         vpc_link_subnet_ids:
-          output_for(:prerequisites, 'private_subnet_ids')
+          output_for(:prerequisites, 'private_subnet_ids'),
+        tls_server_name_to_verify: 'example.com'
       )
     end
   end
@@ -37,7 +38,8 @@ describe 'VPC link' do
       vars.merge(
         vpc_id: output_for(:prerequisites, 'vpc_id'),
         vpc_link_subnet_ids:
-          output_for(:prerequisites, 'private_subnet_ids')
+          output_for(:prerequisites, 'private_subnet_ids'),
+        tls_server_name_to_verify: 'example.com'
       )
     end
   end
@@ -76,7 +78,8 @@ describe 'VPC link' do
       provision do |vars|
         vars.merge(
           include_vpc_link: false,
-          vpc_link_id: output_for(:prerequisites, 'vpc_link_id')
+          vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
+          tls_server_name_to_verify: 'example.com'
         )
       end
     end
@@ -93,7 +96,8 @@ describe 'VPC link' do
           include_vpc_link: true,
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids')
+            output_for(:prerequisites, 'private_subnet_ids'),
+          tls_server_name_to_verify: 'example.com'
         )
       end
     end
@@ -133,6 +137,7 @@ describe 'VPC link' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
+          tls_server_name_to_verify: 'example.com',
           tags: { Alpha: 'beta', Gamma: 'delta' }
         )
       end
@@ -158,6 +163,7 @@ describe 'VPC link' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
+          tls_server_name_to_verify: 'example.com',
           include_default_tags: false,
           tags: { Alpha: 'beta', Gamma: 'delta' }
         )
@@ -192,6 +198,7 @@ describe 'VPC link' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
+          tls_server_name_to_verify: 'example.com',
           include_default_tags: true,
           tags: { Alpha: 'beta', Gamma: 'delta' }
         )
@@ -218,6 +225,7 @@ describe 'VPC link' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
+          tls_server_name_to_verify: 'example.com',
           include_default_tags: false
         )
       end
@@ -241,6 +249,7 @@ describe 'VPC link' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
+          tls_server_name_to_verify: 'example.com',
           include_default_tags: true
         )
       end
