@@ -2,16 +2,18 @@
 
 require 'spec_helper'
 
-describe 'route' do
-  let(:output_route_id) do
-    output_for(:harness, 'route_id')
+describe 'routes' do
+  let(:output_routes) do
+    output_for(:harness, 'routes')
   end
 
-  let(:route) do
-    api_gateway_v2_client.get_route(
-      api_id: output_for(:prerequisites, 'api_id'),
-      route_id: output_for(:harness, 'route_id')
-    )
+  let(:routes) do
+    output_routes.inject({}) do |acc, route_entry|
+      acc.merge(route_entry[0] => api_gateway_v2_client.get_route(
+        api_id: output_for(:prerequisites, 'api_id'),
+        route_id: route_entry[1]
+      ))
+    end
   end
 
   before(:context) do
@@ -36,7 +38,7 @@ describe 'route' do
 
   describe 'by default' do
     it 'creates a route for the integration' do
-      expect(route).not_to(be_nil)
+      expect(routes.length).to(eq(1))
     end
   end
 end

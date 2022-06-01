@@ -21,10 +21,14 @@ variable "tls_server_name_to_verify" {
   default     = null
 }
 
-variable "route_key" {
-  type        = string
-  description = "The route key to use on the route created for this private integration. Required when `include_route` is `true`. Defaults to \"ANY /{proxy+}\""
-  default     = "ANY /{proxy+}"
+variable "routes" {
+  type        = list(object({
+    route_key: string
+  }))
+  description = "The routes to configure for this private integration. Required when `include_routes` is `true`. Defaults to a single route with key \"ANY /{proxy+}\"."
+  default     = [{
+    route_key: "ANY /{proxy+}"
+  }]
 }
 
 # Needs tests

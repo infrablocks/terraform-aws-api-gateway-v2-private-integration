@@ -17,7 +17,8 @@ describe 'VPC link default security group' do
         vpc_id: output_for(:prerequisites, 'vpc_id'),
         vpc_link_subnet_ids:
           output_for(:prerequisites, 'private_subnet_ids'),
-        tls_server_name_to_verify: 'example.com'
+        tls_server_name_to_verify: 'example.com',
+        routes: []
       )
     end
   end
@@ -28,7 +29,8 @@ describe 'VPC link default security group' do
         vpc_id: output_for(:prerequisites, 'vpc_id'),
         vpc_link_subnet_ids:
           output_for(:prerequisites, 'private_subnet_ids'),
-        tls_server_name_to_verify: 'example.com'
+        tls_server_name_to_verify: 'example.com',
+        routes: []
       )
     end
   end
@@ -81,7 +83,8 @@ describe 'VPC link default security group' do
         vars.merge(
           include_vpc_link: false,
           vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -99,7 +102,8 @@ describe 'VPC link default security group' do
           include_vpc_link: false,
           include_vpc_link_default_security_group: false,
           vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -117,7 +121,8 @@ describe 'VPC link default security group' do
           include_vpc_link: false,
           include_vpc_link_default_security_group: true,
           vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -136,7 +141,8 @@ describe 'VPC link default security group' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -195,7 +201,8 @@ describe 'VPC link default security group' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -215,7 +222,8 @@ describe 'VPC link default security group' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -274,7 +282,8 @@ describe 'VPC link default security group' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -298,7 +307,8 @@ describe 'VPC link default security group' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -329,7 +339,8 @@ describe 'VPC link default security group' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -353,7 +364,8 @@ describe 'VPC link default security group' do
           vpc_id: output_for(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
+          tls_server_name_to_verify: 'example.com',
+          routes: []
         )
       end
     end
@@ -385,6 +397,7 @@ describe 'VPC link default security group' do
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
+          routes: [],
           tags: { Alpha: 'beta', Gamma: 'delta' }
         )
       end
@@ -411,6 +424,7 @@ describe 'VPC link default security group' do
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
+          routes: [],
           include_default_tags: false,
           tags: { Alpha: 'beta', Gamma: 'delta' }
         )
@@ -446,6 +460,7 @@ describe 'VPC link default security group' do
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
+          routes: [],
           include_default_tags: true,
           tags: { Alpha: 'beta', Gamma: 'delta' }
         )
@@ -473,6 +488,7 @@ describe 'VPC link default security group' do
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
+          routes: [],
           include_default_tags: false
         )
       end
@@ -497,6 +513,7 @@ describe 'VPC link default security group' do
           vpc_link_subnet_ids:
             output_for(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
+          routes: [],
           include_default_tags: true
         )
       end

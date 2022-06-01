@@ -4,7 +4,7 @@ locals {
   vpc_link_subnet_ids                     = var.vpc_link_subnet_ids == null ? [] : var.vpc_link_subnet_ids
   vpc_link_default_ingress_cidrs          = var.vpc_link_default_ingress_cidrs == null ? ["0.0.0.0/0"] : var.vpc_link_default_ingress_cidrs
   vpc_link_default_egress_cidrs           = var.vpc_link_default_egress_cidrs == null ? ["0.0.0.0/0"] : var.vpc_link_default_egress_cidrs
-  route_key                               = var.route_key == null ? "ANY /{proxy+}" : var.route_key
+  routes                                  = var.routes == null ? [{route_key: "ANY /{proxy+}"}] : var.routes
   include_default_tags                    = var.include_default_tags == null ? true : var.include_default_tags
   include_vpc_link                        = var.include_vpc_link == null ? true : var.include_vpc_link
   include_vpc_link_default_security_group = var.include_vpc_link_default_security_group == null ? true : var.include_vpc_link_default_security_group
@@ -20,6 +20,8 @@ locals {
   vpc_link_default_security_group_count = local.include_vpc_link_default_security_group_resolved ? 1 : 0
   vpc_link_default_ingress_rule_count   = local.include_vpc_link_default_ingress_rule_resolved == true ? 1 : 0
   vpc_link_default_egress_rule_count    = local.include_vpc_link_default_egress_rule_resolved == true ? 1 : 0
+
+  route_map = {for route in local.routes: route.route_key => route }
 
   default_tags = local.include_default_tags == true ? {
     Component            = var.component

@@ -17,6 +17,8 @@ module "private_integration" {
   integration_uri           = data.terraform_remote_state.prerequisites.outputs.alb_listeners["default"].arn
   tls_server_name_to_verify = var.tls_server_name_to_verify
 
+  routes = var.routes
+
   vpc_id              = var.vpc_id
   vpc_link_id         = var.vpc_link_id
   vpc_link_subnet_ids = var.vpc_link_subnet_ids

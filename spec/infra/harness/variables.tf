@@ -8,6 +8,13 @@ variable "tls_server_name_to_verify" {
   default = null
 }
 
+variable "routes" {
+  type = list(object({
+    route_key: string
+  }))
+  default = null
+}
+
 variable "vpc_id" {
   type    = string
   default = null
