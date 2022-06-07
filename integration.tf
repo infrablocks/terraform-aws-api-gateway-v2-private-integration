@@ -8,7 +8,7 @@ resource "aws_apigatewayv2_integration" "integration" {
   integration_uri = var.integration_uri
 
   connection_type = "VPC_LINK"
-  connection_id = try(aws_apigatewayv2_vpc_link.vpc_link[0].id, var.vpc_link_id)
+  connection_id = try(module.api_gateway_vpc_link[0].vpc_link_id, var.vpc_link_id)
 
   dynamic "tls_config" {
     for_each = local.use_tls == true ? [var.tls_server_name_to_verify] : []

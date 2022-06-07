@@ -1,9 +1,19 @@
-resource "aws_apigatewayv2_vpc_link" "vpc_link" {
-  count = local.vpc_link_count
+module "api_gateway_vpc_link" {
+  count = local.include_vpc_link == true ? 1 : 0
 
-  name               = "vpc-link-${var.component}-${var.deployment_identifier}"
-  security_group_ids = compact([try(aws_security_group.vpc_link[0].id, null)])
-  subnet_ids         = local.vpc_link_subnet_ids
+  source = "infrablocks/api-gateway-v2/aws//modules/vpc_link"
+  version = "1.0.0-rc.6"
 
-  tags = local.tags
+  component = var.component
+  deployment_identifier = var.deployment_identifier
+
+  vpc_id = local.vpc_id
+  vpc_link_subnet_ids = local.vpc_link_subnet_ids
+
+  tags = var.tags
+
+  include_default_tags = local.include_default_tags
+  include_vpc_link_default_security_group = local.include_vpc_link_default_security_group
+  include_vpc_link_default_ingress_rule = local.include_vpc_link_default_ingress_rule
+  include_vpc_link_default_egress_rule = local.include_vpc_link_default_egress_rule
 }
