@@ -11,7 +11,7 @@ module TerraformModule
       @configuration ||= Configuration.new
     end
 
-    def output_for(role, name)
+    def output(role, name)
       params = {
         name:,
         state: configuration.for(role).state_file,
@@ -21,11 +21,17 @@ module TerraformModule
       JSON.parse(value, symbolize_names: true)
     end
 
-    def provision_for(role, overrides = nil, &)
-      provision(configuration.for(role, overrides), &)
+    def provision(role, overrides = nil, &)
+      do_provision(configuration.for(role, overrides), &)
     end
 
-    def provision(configuration, &)
+    def destroy(role, overrides = nil, opts = {}, &)
+      do_destroy(configuration.for(role, overrides), opts, &)
+    end
+
+    private
+
+    def do_provision(configuration, &)
       with_clean_directory(configuration) do
         log_action(:provisioning, configuration)
         invoke_apply(configuration, &)
@@ -33,11 +39,7 @@ module TerraformModule
       end
     end
 
-    def destroy_for(role, overrides = nil, opts = {}, &)
-      destroy(configuration.for(role, overrides), opts, &)
-    end
-
-    def destroy(configuration, opts = {}, &)
+    def do_destroy(configuration, opts = {}, &)
       return unless opts[:force] || !ENV['DEPLOYMENT_IDENTIFIER']
 
       with_clean_directory(configuration) do
@@ -46,8 +48,6 @@ module TerraformModule
         log_done
       end
     end
-
-    private
 
     def resolve_vars(configuration, &block)
       if block_given?

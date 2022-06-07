@@ -3,8 +3,11 @@
 require 'spec_helper'
 
 describe 'VPC link default security group' do
+  let(:component) { vars(:root).component }
+  let(:deployment_identifier) { vars(:root).deployment_identifier }
+
   let(:output_vpc_link_default_security_group_id) do
-    output_for(:harness, 'vpc_link_default_security_group_id')
+    output(:root, 'vpc_link_default_security_group_id')
   end
 
   let(:vpc_link_default_security_group) do
@@ -12,11 +15,11 @@ describe 'VPC link default security group' do
   end
 
   before(:context) do
-    provision do |vars|
+    provision(:root) do |vars|
       vars.merge(
-        vpc_id: output_for(:prerequisites, 'vpc_id'),
+        vpc_id: output(:prerequisites, 'vpc_id'),
         vpc_link_subnet_ids:
-          output_for(:prerequisites, 'private_subnet_ids'),
+          output(:prerequisites, 'private_subnet_ids'),
         tls_server_name_to_verify: 'example.com',
         routes: []
       )
@@ -24,11 +27,11 @@ describe 'VPC link default security group' do
   end
 
   after(:context) do
-    destroy do |vars|
+    destroy(:root) do |vars|
       vars.merge(
-        vpc_id: output_for(:prerequisites, 'vpc_id'),
+        vpc_id: output(:prerequisites, 'vpc_id'),
         vpc_link_subnet_ids:
-          output_for(:prerequisites, 'private_subnet_ids'),
+          output(:prerequisites, 'private_subnet_ids'),
         tls_server_name_to_verify: 'example.com',
         routes: []
       )
@@ -69,8 +72,8 @@ describe 'VPC link default security group' do
       expect(tag_map(vpc_link_default_security_group))
         .to(eq(
               {
-                'Component' => vars.component,
-                'DeploymentIdentifier' => vars.deployment_identifier
+                'Component' => component,
+                'DeploymentIdentifier' => deployment_identifier
               }
             ))
     end
@@ -79,10 +82,10 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link is false and ' \
            'include_vpc_link_default_security_group is not provided' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: false,
-          vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
+          vpc_link_id: output(:prerequisites, 'vpc_link_id'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -97,11 +100,11 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link is false and ' \
            'include_vpc_link_default_security_group is false' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: false,
           include_vpc_link_default_security_group: false,
-          vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
+          vpc_link_id: output(:prerequisites, 'vpc_link_id'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -116,11 +119,11 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link is false and ' \
            'include_vpc_link_default_security_group is true' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: false,
           include_vpc_link_default_security_group: true,
-          vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
+          vpc_link_id: output(:prerequisites, 'vpc_link_id'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -135,12 +138,12 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link is true and ' \
            'include_vpc_link_default_security_group is not provided' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: true,
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -184,8 +187,8 @@ describe 'VPC link default security group' do
       expect(tags)
         .to(eq(
               {
-                'Component' => vars.component,
-                'DeploymentIdentifier' => vars.deployment_identifier
+                'Component' => component,
+                'DeploymentIdentifier' => deployment_identifier
               }
             ))
     end
@@ -194,13 +197,13 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link is true and ' \
            'include_vpc_link_default_security_group is false' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: true,
           include_vpc_link_default_security_group: false,
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -215,13 +218,13 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link is true and ' \
            'include_vpc_link_default_security_group is true' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: true,
           include_vpc_link_default_security_group: true,
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -265,8 +268,8 @@ describe 'VPC link default security group' do
       expect(tags)
         .to(eq(
               {
-                'Component' => vars.component,
-                'DeploymentIdentifier' => vars.deployment_identifier
+                'Component' => component,
+                'DeploymentIdentifier' => deployment_identifier
               }
             ))
     end
@@ -275,13 +278,13 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link_default_ingress_rule ' \
            'is false' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: true,
           include_vpc_link_default_ingress_rule: false,
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -300,13 +303,13 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link_default_ingress_rule ' \
            'is true' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: true,
           include_vpc_link_default_ingress_rule: true,
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -332,13 +335,13 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link_default_egress_rule ' \
            'is false' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: true,
           include_vpc_link_default_egress_rule: false,
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -357,13 +360,13 @@ describe 'VPC link default security group' do
   describe 'when include_vpc_link_default_egress_rule ' \
            'is true' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
           include_vpc_link: true,
           include_vpc_link_default_egress_rule: true,
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: []
         )
@@ -391,11 +394,11 @@ describe 'VPC link default security group' do
 
   describe 'when tags are provided and include_default_tags is not provided' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: [],
           tags: { Alpha: 'beta', Gamma: 'delta' }
@@ -407,8 +410,8 @@ describe 'VPC link default security group' do
       expect(tag_map(vpc_link_default_security_group))
         .to(include(
               {
-                'Component' => vars.component,
-                'DeploymentIdentifier' => vars.deployment_identifier,
+                'Component' => component,
+                'DeploymentIdentifier' => deployment_identifier,
                 'Alpha' => 'beta',
                 'Gamma' => 'delta'
               }
@@ -418,11 +421,11 @@ describe 'VPC link default security group' do
 
   describe 'when tags are provided and include_default_tags is false' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: [],
           include_default_tags: false,
@@ -445,8 +448,8 @@ describe 'VPC link default security group' do
       expect(tag_map(vpc_link_default_security_group))
         .not_to(include(
                   {
-                    'Component' => vars.component,
-                    'DeploymentIdentifier' => vars.deployment_identifier
+                    'Component' => component,
+                    'DeploymentIdentifier' => deployment_identifier
                   }
                 ))
     end
@@ -454,11 +457,11 @@ describe 'VPC link default security group' do
 
   describe 'when tags are provided and include_default_tags is true' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: [],
           include_default_tags: true,
@@ -471,8 +474,8 @@ describe 'VPC link default security group' do
       expect(tag_map(vpc_link_default_security_group))
         .to(include(
               {
-                'Component' => vars.component,
-                'DeploymentIdentifier' => vars.deployment_identifier,
+                'Component' => component,
+                'DeploymentIdentifier' => deployment_identifier,
                 'Alpha' => 'beta',
                 'Gamma' => 'delta'
               }
@@ -482,11 +485,11 @@ describe 'VPC link default security group' do
 
   describe 'when include_default_tags is false' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: [],
           include_default_tags: false
@@ -498,8 +501,8 @@ describe 'VPC link default security group' do
       expect(tag_map(vpc_link_default_security_group))
         .not_to(include(
                   {
-                    'Component' => vars.component,
-                    'DeploymentIdentifier' => vars.deployment_identifier
+                    'Component' => component,
+                    'DeploymentIdentifier' => deployment_identifier
                   }
                 ))
     end
@@ -507,11 +510,11 @@ describe 'VPC link default security group' do
 
   describe 'when include_default_tags is true' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify: 'example.com',
           routes: [],
           include_default_tags: true
@@ -523,8 +526,8 @@ describe 'VPC link default security group' do
       expect(tag_map(vpc_link_default_security_group))
         .to(include(
               {
-                'Component' => vars.component,
-                'DeploymentIdentifier' => vars.deployment_identifier
+                'Component' => component,
+                'DeploymentIdentifier' => deployment_identifier
               }
             ))
     end

@@ -1,6 +1,6 @@
 ---
-source_directory: "spec/infra/harness"
-state_file: "%{hiera('project_directory')}/state/harness.tfstate"
+source_directory: "spec/infra/root"
+state_file: "%{hiera('project_directory')}/state/root.tfstate"
 vars:
   region: "%{hiera('region')}"
 

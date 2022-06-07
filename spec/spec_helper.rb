@@ -29,9 +29,9 @@ RSpec.configure do |config|
   config.include_context 'terraform'
 
   config.before(:suite) do
-    TerraformModule.provision_for(:prerequisites)
+    TerraformModule.provision(:prerequisites)
   end
   config.after(:suite) do
-    TerraformModule.destroy_for(:prerequisites)
+    TerraformModule.destroy(:prerequisites)
   end
 end

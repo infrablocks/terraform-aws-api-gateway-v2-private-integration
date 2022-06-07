@@ -12,21 +12,27 @@ module RSpec
       TerraformModule.configuration
     end
 
-    def output_for(role, name)
-      TerraformModule.output_for(role, name)
+    # rubocop:disable Style/OpenStructUse
+    def vars(role)
+      OpenStruct.new(configuration.for(role).vars)
+    end
+    # rubocop:enable Style/OpenStructUse
+
+    def output(role, name)
+      TerraformModule.output(role, name)
     end
 
-    def provision(overrides = nil, &)
-      TerraformModule.provision_for(:harness, overrides, &)
+    def provision(role, overrides = nil, &)
+      TerraformModule.provision(role, overrides, &)
     end
 
-    def destroy(overrides = nil, &)
-      TerraformModule.destroy_for(:harness, overrides, force: true, &)
+    def destroy(role, overrides = nil, &)
+      TerraformModule.destroy(role, overrides, force: true, &)
     end
 
-    def reprovision(overrides = nil, &)
-      destroy(overrides, &)
-      provision(overrides, &)
+    def reprovision(role, overrides = nil, &)
+      destroy(role, overrides, &)
+      provision(role, overrides, &)
     end
   end
 end
@@ -35,16 +41,6 @@ end
 shared_context 'terraform' do
   include Awspec::Helper::Finder
   include RSpec::Terraform
-
-  # rubocop:disable Style/OpenStructUse
-  let(:vars) do
-    OpenStruct.new(
-      TerraformModule.configuration
-          .for(:harness)
-          .vars
-    )
-  end
-  # rubocop:enable Style/OpenStructUse
 
   let(:api_gateway_v2_client) do
     Aws::ApiGatewayV2::Client.new

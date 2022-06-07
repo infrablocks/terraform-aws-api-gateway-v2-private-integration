@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe 'integration' do
   let(:alb_listeners) do
-    output_for(:prerequisites, 'alb_listeners')
+    output(:prerequisites, 'alb_listeners')
   end
 
   let(:integration_uri) do
@@ -12,13 +12,13 @@ describe 'integration' do
   end
 
   let(:output_vpc_link_id) do
-    output_for(:harness, 'vpc_link_id')
+    output(:root, 'vpc_link_id')
   end
 
   let(:integration) do
     api_gateway_v2_client.get_integration(
-      api_id: output_for(:prerequisites, 'api_id'),
-      integration_id: output_for(:harness, 'integration_id')
+      api_id: output(:prerequisites, 'api_id'),
+      integration_id: output(:root, 'integration_id')
     )
   end
 
@@ -28,22 +28,22 @@ describe 'integration' do
 
   describe 'by default' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify:
         )
       end
     end
 
     after(:context) do
-      destroy do |vars|
+      destroy(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           tls_server_name_to_verify:
         )
       end
@@ -86,22 +86,22 @@ describe 'integration' do
 
   describe 'when use_tls is false' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           use_tls: false
         )
       end
     end
 
     after(:context) do
-      destroy do |vars|
+      destroy(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           use_tls: false
         )
       end
@@ -114,11 +114,11 @@ describe 'integration' do
 
   describe 'when use_tls is true' do
     before(:context) do
-      provision do |vars|
+      provision(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           use_tls: true,
           tls_server_name_to_verify:
         )
@@ -126,11 +126,11 @@ describe 'integration' do
     end
 
     after(:context) do
-      destroy do |vars|
+      destroy(:root) do |vars|
         vars.merge(
-          vpc_id: output_for(:prerequisites, 'vpc_id'),
+          vpc_id: output(:prerequisites, 'vpc_id'),
           vpc_link_subnet_ids:
-            output_for(:prerequisites, 'private_subnet_ids'),
+            output(:prerequisites, 'private_subnet_ids'),
           use_tls: true,
           tls_server_name_to_verify:
         )

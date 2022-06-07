@@ -4,33 +4,33 @@ require 'spec_helper'
 
 describe 'routes' do
   let(:output_routes) do
-    output_for(:harness, 'routes')
+    output(:root, 'routes')
   end
 
   let(:routes) do
     output_routes.inject({}) do |acc, route_entry|
       acc.merge(route_entry[0] => api_gateway_v2_client.get_route(
-        api_id: output_for(:prerequisites, 'api_id'),
+        api_id: output(:prerequisites, 'api_id'),
         route_id: route_entry[1]
       ))
     end
   end
 
   before(:context) do
-    provision do |vars|
+    provision(:root) do |vars|
       vars.merge(
         include_vpc_link: false,
-        vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
+        vpc_link_id: output(:prerequisites, 'vpc_link_id'),
         tls_server_name_to_verify: 'example.com'
       )
     end
   end
 
   after(:context) do
-    destroy do |vars|
+    destroy(:root) do |vars|
       vars.merge(
         include_vpc_link: false,
-        vpc_link_id: output_for(:prerequisites, 'vpc_link_id'),
+        vpc_link_id: output(:prerequisites, 'vpc_link_id'),
         tls_server_name_to_verify: 'example.com'
       )
     end
