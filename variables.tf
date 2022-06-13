@@ -31,6 +31,15 @@ variable "routes" {
   }]
 }
 
+variable "request_parameters" {
+  type = list(object({
+    parameter: string,
+    type: string,
+    value: string
+  }))
+  default = []
+}
+
 # Needs tests
 variable "vpc_id" {
   type        = string

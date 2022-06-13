@@ -19,6 +19,8 @@ module "private_integration" {
 
   routes = var.routes
 
+  request_parameters = var.request_parameters
+
   vpc_id              = var.vpc_id
   vpc_link_id         = var.vpc_link_id
   vpc_link_subnet_ids = var.vpc_link_subnet_ids

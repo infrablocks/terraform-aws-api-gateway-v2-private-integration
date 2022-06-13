@@ -15,6 +15,15 @@ variable "routes" {
   default = null
 }
 
+variable "request_parameters" {
+  type = list(object({
+    parameter: string,
+    type: string,
+    value: string
+  }))
+  default = null
+}
+
 variable "vpc_id" {
   type    = string
   default = null
