@@ -19,3 +19,5 @@ gem 'rubocop-rake'
 gem 'rubocop-rspec'
 gem 'rubyzip'
 gem 'semantic'
+
+gem "faker", "~> 2.21"

@@ -5,6 +5,7 @@ require 'awspec'
 require 'ostruct'
 
 require_relative '../terraform_module'
+require_relative '../ruby_terraform/models/plan'
 
 module RSpec
   module Terraform
@@ -20,6 +21,11 @@ module RSpec
 
     def output(role, name)
       TerraformModule.output(role, name)
+    end
+
+    def plan(role, overrides = nil, &)
+      RubyTerraform::Models::Plan.new(
+        TerraformModule.plan(role, overrides, &))
     end
 
     def provision(role, overrides = nil, &)

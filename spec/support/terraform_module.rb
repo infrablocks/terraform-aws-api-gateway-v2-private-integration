@@ -2,6 +2,8 @@
 
 require 'ruby_terraform'
 require 'ostruct'
+require 'fileutils'
+require 'securerandom'
 
 require_relative '../../lib/configuration'
 
@@ -21,6 +23,10 @@ module TerraformModule
       JSON.parse(value, symbolize_names: true)
     end
 
+    def plan(role, overrides = nil, &)
+      do_plan(configuration.for(role, overrides), &)
+    end
+
     def provision(role, overrides = nil, &)
       do_provision(configuration.for(role, overrides), &)
     end
@@ -30,6 +36,16 @@ module TerraformModule
     end
 
     private
+
+    def do_plan(configuration, &)
+      with_clean_directory(configuration) do
+        log_action(:planning, configuration)
+        plan_file_name = invoke_plan(configuration, &)
+        plan_file_contents = invoke_show(configuration, plan_file_name)
+        log_done
+        JSON.parse(plan_file_contents, symbolize_names: true)
+      end
+    end
 
     def do_provision(configuration, &)
       with_clean_directory(configuration) do
@@ -67,6 +83,29 @@ module TerraformModule
         input: false
       )
       yield configuration
+    end
+
+    def invoke_plan(configuration, &)
+      plan_file_name = SecureRandom.hex(10)
+      RubyTerraform.plan(
+        chdir: configuration.configuration_directory,
+        state: configuration.state_file,
+        vars: resolve_vars(configuration, &),
+        out: plan_file_name,
+        input: false
+      )
+      plan_file_name
+    end
+
+    def invoke_show(configuration, file_name)
+      stdout = StringIO.new
+      RubyTerraform::Commands::Show.new(stdout:).execute(
+        chdir: configuration.configuration_directory,
+        path: file_name,
+        no_color: true,
+        json: true
+      )
+      stdout.string
     end
 
     def invoke_apply(configuration, &)
