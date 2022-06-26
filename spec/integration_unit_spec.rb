@@ -63,22 +63,17 @@ describe 'integration' do
     'example.com'
   end
 
-  fdescribe 'by default' do
+  describe 'by default' do
     subject do
-      plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify:
-        )
-      end
+      plan(:prerequisites)
     end
 
-    it 'creates a single integration' do
-      expect(subject)
-        .to(include_resource_creation('aws_apigatewayv2_integration')
-              .count(1))
+    fit 'creates a single integration' do
+      require 'pp'
+      pp subject
+      # expect(subject)
+      #   .to(include_resource_creation('aws_apigatewayv2_integration')
+      #         .count(1))
     end
 
     it 'uses an integration type of HTTP_PROXY' do
