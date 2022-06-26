@@ -1,5 +1,28 @@
 data "aws_availability_zones" "zones" {}
 
+locals {
+  thing1 = sensitive([
+    "first",
+    "second",
+    "third",
+  ])
+  thing2 = [sensitive(1), 2, 3]
+}
+
+output "thing1" {
+  value = local.thing1
+  sensitive = true
+}
+output "thing2" {
+  value = local.thing2
+  sensitive = true
+}
+
+resource "command_command" "thing" {
+  name = "ls"
+  arguments = local.thing1
+}
+
 module "base_networking" {
   source  = "infrablocks/base-networking/aws"
   version = "4.0.0"

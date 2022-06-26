@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../value_equality'
-require_relative './values'
+require_relative './objects'
 
 module RubyTerraform
   module Models
@@ -33,7 +33,7 @@ module RubyTerraform
       end
 
       def before_object
-        Values.convert(before, sensitive: before_sensitive)
+        Objects.box(before, sensitive: before_sensitive)
       end
 
       def after

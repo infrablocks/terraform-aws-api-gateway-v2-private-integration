@@ -6,6 +6,8 @@ require 'ruby_terraform'
 require 'support/shared_contexts/terraform'
 require 'support/terraform_module'
 
+RTM = RubyTerraform::Models
+
 RubyTerraform.configure do |c|
   logger = Logger.new($stdout)
   logger.level = Logger::Severity::DEBUG

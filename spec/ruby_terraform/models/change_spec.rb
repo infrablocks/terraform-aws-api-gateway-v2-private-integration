@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+
 require_relative '../../support/random'
 require_relative '../../support/build'
-
-RTM = RubyTerraform::Models
 
 describe RubyTerraform::Models::Change do
   describe '#actions' do
@@ -72,146 +71,40 @@ describe RubyTerraform::Models::Change do
   end
 
   describe '#before_object' do
-    it 'converts standard scalar attribute values' do
-      before_value = {
-        standard_attribute1: 'value1',
-        standard_attribute2: false,
-        standard_attribute3: 300
-      }
-      change_content =
-        Support::Build.change_content(
-          before: before_value,
-          before_sensitive: {}
-        )
-      change = described_class.new(change_content)
-
-      expect(change.before_object)
-        .to(eq({
-                 standard_attribute1:
-                   RTM::Values.known_non_sensitive('value1'),
-                 standard_attribute2:
-                   RTM::Values.known_non_sensitive(false),
-                 standard_attribute3:
-                   RTM::Values.known_non_sensitive(300)
-               }))
-    end
-
-    it 'converts standard list attribute values' do
-      before_value = {
-        standard_attribute1: %w[value1 value2 value3],
-        standard_attribute2: [true, false, true]
-      }
-      change_content =
-        Support::Build.change_content(
-          before: before_value,
-          before_sensitive: {}
-        )
-      change = described_class.new(change_content)
-
-      expect(change.before_object)
-        .to(eq({
-                 standard_attribute1: [
-                   RTM::Values.known_non_sensitive('value1'),
-                   RTM::Values.known_non_sensitive('value2'),
-                   RTM::Values.known_non_sensitive('value3')
-                 ],
-                 standard_attribute2: [
-                   RTM::Values.known_non_sensitive(true),
-                   RTM::Values.known_non_sensitive(false),
-                   RTM::Values.known_non_sensitive(true)
-                 ]
-               }))
-    end
-
-    it 'converts standard map attribute values' do
-      before_value = {
-        standard_attribute1: { key1: 'value1', key2: false, key3: 450 },
-        standard_attribute2: { key4: 'value2' }
-      }
-      change_content =
-        Support::Build.change_content(
-          before: before_value,
-          before_sensitive: {}
-        )
-      change = described_class.new(change_content)
-
-      expect(change.before_object)
-        .to(eq({
-                 standard_attribute1: {
-                   key1: RTM::Values.known_non_sensitive('value1'),
-                   key2: RTM::Values.known_non_sensitive(false),
-                   key3: RTM::Values.known_non_sensitive(450)
-                 },
-                 standard_attribute2: {
-                   key4: RTM::Values.known_non_sensitive('value2')
-                 }
-               }))
-    end
-
-    it 'converts standard complex nested attribute values' do
-      before_value = {
-        standard_attribute1: {
+    it 'return the before object value with boxed leaf values' do
+      before = {
+        attribute: {
           key1: %w[value1 value2 value3],
           key2: { key4: true },
           key3: [{ key5: ['value4'] }, { key5: ['value5'] }]
         }
       }
+      before_sensitive = {
+        attribute: {
+          key1: [true, false, true],
+          key3: [{ key5: [true] }, { key5: [true] }]
+        }
+      }
       change_content =
-        Support::Build.change_content(
-          before: before_value,
-          before_sensitive: {}
-        )
+        Support::Build.change_content(before:, before_sensitive:)
       change = described_class.new(change_content)
 
       expect(change.before_object)
         .to(
           eq(
             {
-              standard_attribute1: {
+              attribute: {
                 key1: [
-                  RTM::Values.known_non_sensitive('value1'),
+                  RTM::Values.known_sensitive('value1'),
                   RTM::Values.known_non_sensitive('value2'),
-                  RTM::Values.known_non_sensitive('value3')
+                  RTM::Values.known_sensitive('value3')
                 ],
                 key2: { key4: RTM::Values.known_non_sensitive(true) },
                 key3: [
-                  { key5: [RTM::Values.known_non_sensitive('value4')] },
-                  { key5: [RTM::Values.known_non_sensitive('value5')] }
+                  { key5: [RTM::Values.known_sensitive('value4')] },
+                  { key5: [RTM::Values.known_sensitive('value5')] }
                 ]
               }
-            }
-          )
-        )
-    end
-
-    it 'converts sensitive scalar attribute values' do
-      before_value = {
-        sensitive_attribute1: 'value1',
-        sensitive_attribute2: false,
-        sensitive_attribute3: 500
-      }
-      before_sensitive_value = {
-        sensitive_attribute1: true,
-        sensitive_attribute2: true,
-        sensitive_attribute3: true
-      }
-      change_content =
-        Support::Build.change_content(
-          before: before_value,
-          before_sensitive: before_sensitive_value
-        )
-      change = described_class.new(change_content)
-
-      expect(change.before_object)
-        .to(
-          eq(
-            {
-              sensitive_attribute1:
-                RTM::Values.known_sensitive('value1'),
-              sensitive_attribute2:
-                RTM::Values.known_sensitive(false),
-              sensitive_attribute3:
-                RTM::Values.known_sensitive(500)
             }
           )
         )
