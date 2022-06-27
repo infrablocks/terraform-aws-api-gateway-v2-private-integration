@@ -3,6 +3,7 @@
 require_relative './list'
 require_relative './map'
 require_relative './known_value'
+require_relative './unknown_value'
 
 module RubyTerraform
   module Models
@@ -10,6 +11,10 @@ module RubyTerraform
       class << self
         def known(value, sensitive: false)
           KnownValue.new(value, sensitive:)
+        end
+
+        def unknown(sensitive: false)
+          UnknownValue.new(sensitive:)
         end
 
         def list(value, sensitive: false)

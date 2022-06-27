@@ -5,6 +5,8 @@ require 'spec_helper'
 require_relative '../../support/random'
 require_relative '../../support/build'
 
+V = RTM::Values
+
 describe RubyTerraform::Models::Change do
   describe '#actions' do
     {
@@ -71,7 +73,8 @@ describe RubyTerraform::Models::Change do
   end
 
   describe '#before_object' do
-    it 'return the before object value with boxed leaf values' do
+    # rubocop:disable RSpec/ExampleLength
+    it 'return the boxed before object value' do
       before = {
         attribute: {
           key1: %w[value1 value2 value3],
@@ -82,6 +85,7 @@ describe RubyTerraform::Models::Change do
       before_sensitive = {
         attribute: {
           key1: [true, false, true],
+          key2: true,
           key3: [{ key5: [true] }, { key5: [true] }]
         }
       }
@@ -89,26 +93,40 @@ describe RubyTerraform::Models::Change do
         Support::Build.change_content(before:, before_sensitive:)
       change = described_class.new(change_content)
 
-      expect(change.before_object)
-        .to(
-          eq(
+      expected_key1 = V.list(
+        [
+          V.known('value1', sensitive: true),
+          V.known('value2'),
+          V.known('value3', sensitive: true)
+        ]
+      )
+      expected_key2 =
+        V.map({ key4: V.known(true) }, sensitive: true)
+      expected_key3 = V.list(
+        [
+          V.map(
+            { key5: V.list([V.known('value4', sensitive: true)]) }
+          ),
+          V.map(
+            { key5: V.list([V.known('value5', sensitive: true)]) }
+          )
+        ]
+      )
+      expected = V.map(
+        {
+          attribute: V.map(
             {
-              attribute: {
-                key1: [
-                  RTM::Values.known('value1', sensitive: true),
-                  RTM::Values.known('value2'),
-                  RTM::Values.known('value3', sensitive: true)
-                ],
-                key2: { key4: RTM::Values.known(true) },
-                key3: [
-                  { key5: [RTM::Values.known('value4', sensitive: true)] },
-                  { key5: [RTM::Values.known('value5', sensitive: true)] }
-                ]
-              }
+              key1: expected_key1,
+              key2: expected_key2,
+              key3: expected_key3
             }
           )
-        )
+        }
+      )
+
+      expect(change.before_object).to(eq(expected))
     end
+    # rubocop:enable RSpec/ExampleLength
   end
 
   describe '#after' do
@@ -157,6 +175,82 @@ describe RubyTerraform::Models::Change do
 
       expect(change.after_sensitive).to(eq(after_sensitive_object_value))
     end
+  end
+
+  describe '#after_object' do
+    # rubocop:disable RSpec/ExampleLength
+    it 'returns the boxed after object value' do
+      after = {
+        attribute1: {
+          key1: %w[value1 value2 value3],
+          key2: { key4: true },
+          key3: [{ key5: ['value4'] }, { key5: ['value5'] }]
+        }
+      }
+      after_unknown = {
+        attribute2: {
+          key1: true,
+          key2: true
+        }
+      }
+      after_sensitive = {
+        attribute1: {
+          key1: [true, false, true],
+          key2: true,
+          key3: [{ key5: [true] }, { key5: [true] }]
+        },
+        attribute2: {
+          key2: true
+        }
+      }
+      change_content =
+        Support::Build.change_content(
+          after:, after_unknown:, after_sensitive:
+        )
+      change = described_class.new(change_content)
+
+      expected_attribute1_key1 = V.list(
+        [
+          V.known('value1', sensitive: true),
+          V.known('value2'),
+          V.known('value3', sensitive: true)
+        ]
+      )
+      expected_attribute1_key2 =
+        V.map({ key4: V.known(true) }, sensitive: true)
+      expected_attribute1_key3 = V.list(
+        [
+          V.map(
+            { key5: V.list([V.known('value4', sensitive: true)]) }
+          ),
+          V.map(
+            { key5: V.list([V.known('value5', sensitive: true)]) }
+          )
+        ]
+      )
+      expected_attribute1 = V.map(
+        {
+          key1: expected_attribute1_key1,
+          key2: expected_attribute1_key2,
+          key3: expected_attribute1_key3
+        }
+      )
+      expected_attribute2 = V.map(
+        {
+          key1: V.unknown,
+          key2: V.unknown(sensitive: true)
+        }
+      )
+      expected = V.map(
+        {
+          attribute1: expected_attribute1,
+          attribute2: expected_attribute2
+        }
+      )
+
+      expect(change.after_object).to(eq(expected))
+    end
+    # rubocop:enable RSpec/ExampleLength
   end
 
   describe '#no_op?' do

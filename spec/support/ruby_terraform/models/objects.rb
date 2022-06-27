@@ -6,12 +6,21 @@ module RubyTerraform
   module Models
     module Objects
       class << self
-        def box(object, sensitive: {})
-          paths = paths(object)
-          values = values(paths, object, sensitive)
+        # rubocop:disable Style/RedundantAssignment
+        def box(object, unknown: {}, sensitive: {})
+          unknown_paths = paths(unknown)
+          unknown_values = unknown_values(unknown_paths, unknown:, sensitive:)
+          boxed_unknown = object(unknown_paths, unknown_values,
+                                 sensitive:, initial: Values.empty_map)
 
-          object(paths, values, sensitive:)
+          object_paths = paths(object)
+          object_values = known_values(object_paths, object:, sensitive:)
+          boxed_object = object(object_paths, object_values,
+                                sensitive:, initial: boxed_unknown)
+
+          boxed_object
         end
+        # rubocop:enable Style/RedundantAssignment
 
         def paths(object, current = [], accumulator = [])
           normalised = normalise(object)
@@ -24,7 +33,7 @@ module RubyTerraform
           end
         end
 
-        def values(paths, object = {}, sensitive = {})
+        def known_values(paths, object: {}, sensitive: {})
           paths.map do |path|
             resolved = try_dig(object, path)
             resolved_sensitive = try_dig(sensitive, path) == true
@@ -33,12 +42,21 @@ module RubyTerraform
           end
         end
 
+        def unknown_values(paths, unknown: {}, sensitive: {})
+          paths.map do |path|
+            resolved = try_dig(unknown, path)
+            resolved_sensitive = try_dig(sensitive, path) == true
+
+            resolved ? Values.unknown(sensitive: resolved_sensitive) : nil
+          end
+        end
+
         private
 
-        def object(paths, values, sensitive: {})
+        def object(paths, values, sensitive: {}, initial: Values.empty_map)
           paths
             .zip(values)
-            .each_with_object(Values.empty_map) do |path_value, object|
+            .each_with_object(initial) do |path_value, object|
             path, value = path_value
             update_in(object, path, value, sensitive:)
           end
@@ -95,7 +113,7 @@ module RubyTerraform
         def normalise(object)
           case object
           when Array then object.each_with_index.to_a
-          when Hash then object.invert.each_pair.to_a
+          when Hash then object.to_a.map { |e| [e[1], e[0]] }
           else object
           end
         end

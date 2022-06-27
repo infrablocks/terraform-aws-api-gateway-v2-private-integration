@@ -41,12 +41,12 @@ module RubyTerraform
         [@value, @sensitive]
       end
 
-      # def inspect
-      #   sensitive = sensitive? ? 'sensitive' : 'non-sensitive'
-      #   "#{value.inspect} (#{sensitive})"
-      # end
-      #
-      # alias to_s inspect
+      def inspect
+        sensitive = sensitive? ? 'sensitive' : 'non-sensitive'
+        "#{value.inspect} (#{sensitive})"
+      end
+
+      alias to_s inspect
     end
   end
 end
