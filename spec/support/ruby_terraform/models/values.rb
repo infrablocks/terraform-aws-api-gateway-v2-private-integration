@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative './list'
+require_relative './map'
 require_relative './known_value'
 
 module RubyTerraform
@@ -10,12 +12,20 @@ module RubyTerraform
           KnownValue.new(value, sensitive:)
         end
 
-        def known_non_sensitive(value)
-          known(value, sensitive: false)
+        def list(value, sensitive: false)
+          List.new(value, sensitive:)
         end
 
-        def known_sensitive(value)
-          known(value, sensitive: true)
+        def empty_list(sensitive: false)
+          list([], sensitive:)
+        end
+
+        def map(value, sensitive: false)
+          Map.new(value, sensitive:)
+        end
+
+        def empty_map(sensitive: false)
+          map({}, sensitive:)
         end
       end
     end

@@ -95,14 +95,14 @@ describe RubyTerraform::Models::Change do
             {
               attribute: {
                 key1: [
-                  RTM::Values.known_sensitive('value1'),
-                  RTM::Values.known_non_sensitive('value2'),
-                  RTM::Values.known_sensitive('value3')
+                  RTM::Values.known('value1', sensitive: true),
+                  RTM::Values.known('value2'),
+                  RTM::Values.known('value3', sensitive: true)
                 ],
-                key2: { key4: RTM::Values.known_non_sensitive(true) },
+                key2: { key4: RTM::Values.known(true) },
                 key3: [
-                  { key5: [RTM::Values.known_sensitive('value4')] },
-                  { key5: [RTM::Values.known_sensitive('value5')] }
+                  { key5: [RTM::Values.known('value4', sensitive: true)] },
+                  { key5: [RTM::Values.known('value5', sensitive: true)] }
                 ]
               }
             }
