@@ -48,6 +48,14 @@ module RubyTerraform
         @content[:after_sensitive]
       end
 
+      def after_object
+        Objects.box(
+          after,
+          unknown: after_unknown,
+          sensitive: after_sensitive
+        )
+      end
+
       def no_op?
         actions == [:no_op]
       end
