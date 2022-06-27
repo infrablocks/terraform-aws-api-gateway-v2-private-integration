@@ -4,6 +4,8 @@ require 'spec_helper'
 
 require_relative '../../support/ruby_terraform/models/objects'
 
+V = RubyTerraform::Models::Values
+
 describe RubyTerraform::Models::Objects do
   describe '.paths' do
     it 'returns the paths for an object of scalars' do
@@ -95,11 +97,13 @@ describe RubyTerraform::Models::Objects do
       boxed = described_class.box(object, sensitive:)
 
       expect(boxed)
-        .to(eq({
-                 attribute1: RTM::Values.known_non_sensitive('value1'),
-                 attribute2: RTM::Values.known_non_sensitive(false),
-                 attribute3: RTM::Values.known_non_sensitive(300)
-               }))
+        .to(eq(V.map(
+                 {
+                   attribute1: V.known('value1'),
+                   attribute2: V.known(false),
+                   attribute3: V.known(300)
+                 }
+               )))
     end
 
     it 'boxes standard list attribute values' do
@@ -112,18 +116,24 @@ describe RubyTerraform::Models::Objects do
       boxed = described_class.box(object, sensitive:)
 
       expect(boxed)
-        .to(eq({
-                 attribute1: [
-                   RTM::Values.known_non_sensitive('value1'),
-                   RTM::Values.known_non_sensitive('value2'),
-                   RTM::Values.known_non_sensitive('value3')
-                 ],
-                 attribute2: [
-                   RTM::Values.known_non_sensitive(true),
-                   RTM::Values.known_non_sensitive(false),
-                   RTM::Values.known_non_sensitive(true)
-                 ]
-               }))
+        .to(eq(V.map(
+                 {
+                   attribute1: V.list(
+                     [
+                       V.known('value1'),
+                       V.known('value2'),
+                       V.known('value3')
+                     ]
+                   ),
+                   attribute2: V.list(
+                     [
+                       V.known(true),
+                       V.known(false),
+                       V.known(true)
+                     ]
+                   )
+                 }
+               )))
     end
 
     it 'boxes standard map attribute values' do
@@ -136,16 +146,22 @@ describe RubyTerraform::Models::Objects do
       boxed = described_class.box(object, sensitive:)
 
       expect(boxed)
-        .to(eq({
-                 attribute1: {
-                   key1: RTM::Values.known_non_sensitive('value1'),
-                   key2: RTM::Values.known_non_sensitive(false),
-                   key3: RTM::Values.known_non_sensitive(450)
-                 },
-                 attribute2: {
-                   key4: RTM::Values.known_non_sensitive('value2')
+        .to(eq(V.map(
+                 {
+                   attribute1: V.map(
+                     {
+                       key1: V.known('value1'),
+                       key2: V.known(false),
+                       key3: V.known(450)
+                     }
+                   ),
+                   attribute2: V.map(
+                     {
+                       key4: V.known('value2')
+                     }
+                   )
                  }
-               }))
+               )))
     end
 
     it 'boxes standard complex nested attribute values' do
@@ -160,25 +176,31 @@ describe RubyTerraform::Models::Objects do
 
       boxed = described_class.box(object, sensitive:)
 
-      expect(boxed)
-        .to(
-          eq(
-            {
-              attribute1: {
-                key1: [
-                  RTM::Values.known_non_sensitive('value1'),
-                  RTM::Values.known_non_sensitive('value2'),
-                  RTM::Values.known_non_sensitive('value3')
-                ],
-                key2: { key4: RTM::Values.known_non_sensitive(true) },
-                key3: [
-                  { key5: [RTM::Values.known_non_sensitive('value4')] },
-                  { key5: [RTM::Values.known_non_sensitive('value5')] }
-                ]
-              }
-            }
-          )
-        )
+      expected_key1 = V.list(
+        [
+          V.known('value1'),
+          V.known('value2'),
+          V.known('value3')
+        ]
+      )
+      expected_key2 = V.map({ key4: V.known(true) })
+      expected_key3 = V.list(
+        [
+          V.map({ key5: V.list([V.known('value4')]) }),
+          V.map({ key5: V.list([V.known('value5')]) })
+        ]
+      )
+      expected = V.map({
+                         attribute1: V.map(
+                           {
+                             key1: expected_key1,
+                             key2: expected_key2,
+                             key3: expected_key3
+                           }
+                         )
+                       })
+
+      expect(boxed).to(eq(expected))
     end
 
     it 'boxes sensitive scalar attribute values' do
@@ -196,15 +218,13 @@ describe RubyTerraform::Models::Objects do
       boxed = described_class.box(object, sensitive:)
 
       expect(boxed)
-        .to(
-          eq(
-            {
-              attribute1: RTM::Values.known_sensitive('value1'),
-              attribute2: RTM::Values.known_sensitive(false),
-              attribute3: RTM::Values.known_sensitive(500)
-            }
-          )
-        )
+        .to(eq(V.map(
+                 {
+                   attribute1: V.known('value1', sensitive: true),
+                   attribute2: V.known(false, sensitive: true),
+                   attribute3: V.known(500, sensitive: true)
+                 }
+               )))
     end
 
     it 'boxes sensitive list attribute values' do
@@ -220,18 +240,22 @@ describe RubyTerraform::Models::Objects do
       boxed = described_class.box(object, sensitive:)
 
       expect(boxed)
-        .to(eq({
-                 attribute1: [
-                   RTM::Values.known_sensitive('value1'),
-                   RTM::Values.known_non_sensitive('value2'),
-                   RTM::Values.known_sensitive('value3')
-                 ],
-                 attribute2: [
-                   RTM::Values.known_non_sensitive(true),
-                   RTM::Values.known_non_sensitive(false),
-                   RTM::Values.known_sensitive(true)
-                 ]
-               }))
+        .to(eq(V.map({
+                       attribute1: V.list(
+                         [
+                           V.known('value1', sensitive: true),
+                           V.known('value2'),
+                           V.known('value3', sensitive: true)
+                         ]
+                       ),
+                       attribute2: V.list(
+                         [
+                           V.known(true),
+                           V.known(false),
+                           V.known(true, sensitive: true)
+                         ]
+                       )
+                     })))
     end
 
     it 'boxes sensitive map attribute values' do
@@ -247,16 +271,22 @@ describe RubyTerraform::Models::Objects do
       boxed = described_class.box(object, sensitive:)
 
       expect(boxed)
-        .to(eq({
-                 attribute1: {
-                   key1: RTM::Values.known_sensitive('value1'),
-                   key2: RTM::Values.known_non_sensitive(false),
-                   key3: RTM::Values.known_non_sensitive(450)
-                 },
-                 attribute2: {
-                   key4: RTM::Values.known_sensitive('value2')
+        .to(eq(V.map(
+                 {
+                   attribute1: V.map(
+                     {
+                       key1: V.known('value1', sensitive: true),
+                       key2: V.known(false),
+                       key3: V.known(450)
+                     }
+                   ),
+                   attribute2: V.map(
+                     {
+                       key4: V.known('value2', sensitive: true)
+                     }
+                   )
                  }
-               }))
+               )))
     end
 
     it 'boxes sensitive complex nested attribute values' do
@@ -276,25 +306,147 @@ describe RubyTerraform::Models::Objects do
 
       boxed = described_class.box(object, sensitive:)
 
-      expect(boxed)
-        .to(
-          eq(
+      expected_key1 = V.list(
+        [
+          V.known('value1'),
+          V.known('value2', sensitive: true),
+          V.known('value3')
+        ]
+      )
+      expected_key2 = V.map({ key4: V.known(true) })
+      expected_key3 = V.list(
+        [
+          V.map({ key5: V.list([V.known('value4', sensitive: true)]) }),
+          V.map({ key5: V.list([V.known('value5')]) })
+        ]
+      )
+      expected = V.map(
+        {
+          attribute1: V.map(
             {
-              attribute1: {
-                key1: [
-                  RTM::Values.known_non_sensitive('value1'),
-                  RTM::Values.known_sensitive('value2'),
-                  RTM::Values.known_non_sensitive('value3')
-                ],
-                key2: { key4: RTM::Values.known_non_sensitive(true) },
-                key3: [
-                  { key5: [RTM::Values.known_sensitive('value4')] },
-                  { key5: [RTM::Values.known_non_sensitive('value5')] }
-                ]
-              }
+              key1: expected_key1,
+              key2: expected_key2,
+              key3: expected_key3
             }
           )
-        )
+        }
+      )
+
+      expect(boxed).to(eq(expected))
+    end
+
+    it 'boxes sensitive list attribute' do
+      object = {
+        attribute1: %w[value1 value2 value3],
+        attribute2: [true, false, true]
+      }
+      sensitive = {
+        attribute1: true,
+        attribute2: true
+      }
+
+      boxed = described_class.box(object, sensitive:)
+
+      expect(boxed)
+        .to(eq(V.map(
+                 {
+                   attribute1: V.list(
+                     [
+                       V.known('value1'),
+                       V.known('value2'),
+                       V.known('value3')
+                     ],
+                     sensitive: true
+                   ),
+                   attribute2: V.list(
+                     [
+                       V.known(true),
+                       V.known(false),
+                       V.known(true)
+                     ],
+                     sensitive: true
+                   )
+                 }
+               )))
+    end
+
+    it 'boxes sensitive map attribute' do
+      object = {
+        attribute1: { key1: 'value1', key2: false, key3: 450 },
+        attribute2: { key4: 'value2' }
+      }
+      sensitive = {
+        attribute1: true,
+        attribute2: true
+      }
+
+      boxed = described_class.box(object, sensitive:)
+
+      expect(boxed)
+        .to(eq(V.map(
+                 {
+                   attribute1: V.map(
+                     {
+                       key1: V.known('value1'),
+                       key2: V.known(false),
+                       key3: V.known(450)
+                     },
+                     sensitive: true
+                   ),
+                   attribute2: V.map(
+                     {
+                       key4: V.known('value2')
+                     },
+                     sensitive: true
+                   )
+                 }
+               )))
+    end
+
+    it 'boxes sensitive complex nested attributes' do
+      object = {
+        attribute1: {
+          key1: %w[value1 value2 value3],
+          key2: { key4: true },
+          key3: [{ key5: ['value4'] }, { key5: ['value5'] }]
+        }
+      }
+      sensitive = {
+        attribute1: {
+          key2: true,
+          key3: [true, false]
+        }
+      }
+
+      boxed = described_class.box(object, sensitive:)
+
+      expected_key1 = V.list(
+        [
+          V.known('value1'),
+          V.known('value2'),
+          V.known('value3')
+        ]
+      )
+      expected_key2 = V.map({ key4: V.known(true) }, sensitive: true)
+      expected_key3 = V.list(
+        [
+          V.map({ key5: V.list([V.known('value4')]) }, sensitive: true),
+          V.map({ key5: V.list([V.known('value5')]) }, sensitive: false)
+        ]
+      )
+      expected = V.map(
+        {
+          attribute1: V.map(
+            {
+              key1: expected_key1,
+              key2: expected_key2,
+              key3: expected_key3
+            }
+          )
+        }
+      )
+
+      expect(boxed).to(eq(expected))
     end
   end
 end

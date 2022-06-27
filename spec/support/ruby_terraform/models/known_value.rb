@@ -23,7 +23,7 @@ module RubyTerraform
       end
 
       def state
-        [@value]
+        [@value, @sensitive]
       end
 
       def inspect
