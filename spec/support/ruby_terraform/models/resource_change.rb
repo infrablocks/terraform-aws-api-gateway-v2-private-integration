@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require_relative '../value_equality'
 require_relative 'change'
 
 module RubyTerraform
   module Models
     class ResourceChange
+      include ValueEquality
       def initialize(content)
         @content = content
       end
@@ -75,6 +77,10 @@ module RubyTerraform
 
       def to_h
         @content
+      end
+
+      def state
+        [@content]
       end
     end
   end
