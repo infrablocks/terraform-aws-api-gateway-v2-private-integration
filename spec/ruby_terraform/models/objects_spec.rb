@@ -448,5 +448,53 @@ describe RubyTerraform::Models::Objects do
 
       expect(boxed).to(eq(expected))
     end
+
+    it 'boxes standard unknown scalar attribute values' do
+      object = {}
+      sensitive = {}
+      unknown = {
+        attribute1: true,
+        attribute2: true
+      }
+
+      boxed = described_class.box(object, sensitive:, unknown:)
+
+      expect(boxed)
+        .to(eq(V.map(
+                 {
+                   attribute1: V.unknown,
+                   attribute2: V.unknown
+                 }
+               )))
+    end
+
+    it 'boxes sensitive unknown scalar attribute values' do
+      object = {}
+      sensitive = {
+        attribute1: true,
+        attribute2: true
+      }
+      unknown = {
+        attribute1: true,
+        attribute2: true
+      }
+
+      boxed = described_class.box(object, sensitive:, unknown:)
+
+      expect(boxed)
+        .to(eq(V.map(
+                 {
+                   attribute1: V.unknown(sensitive: true),
+                   attribute2: V.unknown(sensitive: true)
+                 }
+               )))
+    end
+
+    # TODO: need to work out what happens for unknown list, map or complex
+    #       attribute values
+    #
+    # Sometimes, plans include unknown attributes with empty lists, maps or
+    # lists of maps as values. This isn't described in the docs and it isn't
+    # clear how to interpret it.
   end
 end

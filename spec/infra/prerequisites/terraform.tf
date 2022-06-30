@@ -6,9 +6,5 @@ terraform {
       source = "hashicorp/aws"
       version = "4.14"
     }
-    command = {
-      source = "LukeCarrier/command"
-      version = "0.2.0"
-    }
   }
 }
