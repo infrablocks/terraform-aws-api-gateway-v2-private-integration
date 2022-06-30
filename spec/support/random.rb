@@ -3,16 +3,20 @@ require 'faker'
 module Support
   module Random
     class << self
+      def alphanumeric_string(length: 10)
+        Faker::Alphanumeric.alphanumeric(number: length)
+      end
+
       def resource_type
-        Faker::Alphanumeric.alphanumeric(number: 10)
+        alphanumeric_string(length: 10)
       end
 
       def resource_name
-        Faker::Alphanumeric.alphanumeric(number: 10)
+        alphanumeric_string(length: 10)
       end
 
       def module_name
-        Faker::Alphanumeric.alphanumeric(number: 10)
+        alphanumeric_string(length: 10)
       end
 
       def module_address
@@ -20,7 +24,7 @@ module Support
       end
 
       def provider_name
-        Faker::Alphanumeric.alphanumeric(number: 10)
+        alphanumeric_string(length: 10)
       end
     end
   end

@@ -34,7 +34,7 @@ task default: %i[
 
 RakeTerraform.define_installation_tasks(
   path: File.join(Dir.pwd, 'vendor', 'terraform'),
-  version: '1.0.11'
+  version: '1.2.4'
 )
 
 namespace :encryption do

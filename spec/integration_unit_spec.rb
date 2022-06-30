@@ -65,44 +65,52 @@ describe 'integration' do
 
   describe 'by default' do
     subject do
-      plan(:prerequisites)
+      plan(:root) do |vars|
+        vars.merge(
+          deployment_identifier: 'spinach',
+          vpc_id: output(:prerequisites, 'vpc_id'),
+          vpc_link_subnet_ids:
+            output(:prerequisites, 'private_subnet_ids'),
+          tls_server_name_to_verify: 'example.com'
+        )
+      end
     end
 
     fit 'creates a single integration' do
       require 'pp'
-      pp subject
+      pp subject.to_h
       # expect(subject)
       #   .to(include_resource_creation('aws_apigatewayv2_integration')
       #         .count(1))
     end
 
-    it 'uses an integration type of HTTP_PROXY' do
-      expect(subject)
-        .to(include_resource_creation('aws_apigatewayv2_integration',
-                                      'integration')
-              .with_argument_value(:integration_type, 'HTTP_PROXY'))
-    end
-
-    it 'uses an integration method of ANY' do
-      expect(subject)
-        .to(include_resource_creation('aws_apigatewayv2_integration',
-                                      'integration')
-              .with_argument_value(:integration_method, 'ANY'))
-    end
-
-    it 'uses the provided integration URI' do
-      expect(subject)
-        .to(include_resource_creation('aws_apigatewayv2_integration',
-                                      'integration')
-              .with_argument_value(:integration_uri, integration_uri))
-    end
-
-    it 'uses a connection type of VPC_LINK' do
-      expect(subject)
-        .to(include_resource_creation('aws_apigatewayv2_integration',
-                                      'integration')
-              .with_argument_value(:connection_type, 'VPC_LINK'))
-    end
+    # it 'uses an integration type of HTTP_PROXY' do
+    #   expect(subject)
+    #     .to(include_resource_creation('aws_apigatewayv2_integration',
+    #                                   'integration')
+    #           .with_argument_value(:integration_type, 'HTTP_PROXY'))
+    # end
+    #
+    # it 'uses an integration method of ANY' do
+    #   expect(subject)
+    #     .to(include_resource_creation('aws_apigatewayv2_integration',
+    #                                   'integration')
+    #           .with_argument_value(:integration_method, 'ANY'))
+    # end
+    #
+    # it 'uses the provided integration URI' do
+    #   expect(subject)
+    #     .to(include_resource_creation('aws_apigatewayv2_integration',
+    #                                   'integration')
+    #           .with_argument_value(:integration_uri, integration_uri))
+    # end
+    #
+    # it 'uses a connection type of VPC_LINK' do
+    #   expect(subject)
+    #     .to(include_resource_creation('aws_apigatewayv2_integration',
+    #                                   'integration')
+    #           .with_argument_value(:connection_type, 'VPC_LINK'))
+    # end
 
     # it 'uses the created VPC link' do
     #   expect(subject)

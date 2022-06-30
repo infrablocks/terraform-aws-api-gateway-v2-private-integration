@@ -88,6 +88,23 @@ module Support
         defaults.merge(overrides)
       end
       # rubocop:enable Metrics/MethodLength
+
+      def variable_content(overrides = {})
+        {
+          value: Support::Random.alphanumeric_string
+        }.merge(overrides)
+      end
+
+      def plan_content(overrides = {})
+        {
+          format_version: '1.0',
+          terraform_version: '1.1.5',
+          variables: {
+            variable1: variable_content,
+            variable2: variable_content
+          }
+        }.merge(overrides)
+      end
     end
   end
 end
