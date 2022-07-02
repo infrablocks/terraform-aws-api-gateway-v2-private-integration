@@ -3,9 +3,9 @@
 require 'aws-sdk'
 require 'awspec'
 require 'ostruct'
+require 'ruby_terraform'
 
 require_relative '../terraform_module'
-require_relative '../ruby_terraform/models/plan'
 
 module RSpec
   module Terraform
