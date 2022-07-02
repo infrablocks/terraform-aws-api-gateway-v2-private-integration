@@ -31,6 +31,10 @@ module RubyTerraform
         @content[:name]
       end
 
+      def index
+        @content[:index]
+      end
+
       def provider_name
         @content[:provider_name]
       end

@@ -35,6 +35,14 @@ module RubyTerraform
         resource_changes.filter(&:create?)
       end
 
+      def resource_creations_matching(definition)
+        resource_creations.filter do |resource_creation|
+          definition.all? do |method, value|
+            resource_creation.send(method) == value
+          end
+        end
+      end
+
       def resource_reads
         resource_changes.filter(&:read?)
       end
@@ -51,14 +59,8 @@ module RubyTerraform
         resource_changes.filter(&:replace?)
       end
 
-      def find_resource_changes(&block)
+      def resource_changes_with_type(type)
         resource_changes.filter do |resource_change|
-          block.call(resource_change)
-        end
-      end
-
-      def find_resource_changes_by_type(type)
-        find_resource_changes do |resource_change|
           resource_change.type == type
         end
       end

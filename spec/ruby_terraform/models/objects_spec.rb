@@ -4,8 +4,6 @@ require 'spec_helper'
 
 require_relative '../../support/ruby_terraform/models/objects'
 
-V = RubyTerraform::Models::Values
-
 describe RubyTerraform::Models::Objects do
   describe '.paths' do
     it 'returns the paths for an object of scalars' do

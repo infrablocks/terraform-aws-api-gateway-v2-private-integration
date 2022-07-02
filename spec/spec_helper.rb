@@ -5,8 +5,10 @@ require 'ruby_terraform'
 
 require 'support/shared_contexts/terraform'
 require 'support/terraform_module'
+require 'support/rspec/terraform'
 
 RTM = RubyTerraform::Models
+V = RTM::Values
 
 RubyTerraform.configure do |c|
   logger = Logger.new($stdout)
