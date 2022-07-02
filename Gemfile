@@ -20,4 +20,4 @@ gem 'rubocop-rspec'
 gem 'rubyzip'
 gem 'semantic'
 
-gem "faker", "~> 2.21"
+gem 'faker', '~> 2.21'

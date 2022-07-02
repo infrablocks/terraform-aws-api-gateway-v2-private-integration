@@ -16,7 +16,7 @@ describe 'integration' do
   end
 
   describe 'by default' do
-    subject do
+    let(:the_plan) do
       plan(:root) do |vars|
         vars.merge(
           deployment_identifier: 'spinach',
@@ -29,7 +29,7 @@ describe 'integration' do
     end
 
     fit 'creates a single integration' do
-      expect(subject)
+      expect(the_plan)
         .to(include_resource_creation(type: 'aws_apigatewayv2_integration'))
     end
 
