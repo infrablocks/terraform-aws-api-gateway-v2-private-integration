@@ -5,8 +5,6 @@ require 'spec_helper'
 require_relative '../../support/random'
 require_relative '../../support/build'
 
-V = RTM::Values
-
 describe RubyTerraform::Models::Change do
   describe '#actions' do
     {

@@ -64,6 +64,7 @@ module Support
         resource_provider_name = Support::Random.provider_name
         resource_type = Support::Random.resource_type
         resource_name = Support::Random.resource_name
+        resource_index = Support::Random.resource_index
         resource_module_address = Support::Random.module_address
         resource_address =
           if opts[:module_resource]
@@ -85,6 +86,10 @@ module Support
           defaults = defaults.merge(module_address: resource_module_address)
         end
 
+        if opts[:multi_instance_resource]
+          defaults = defaults.merge(index: resource_index)
+        end
+
         defaults.merge(overrides)
       end
       # rubocop:enable Metrics/MethodLength
@@ -102,7 +107,11 @@ module Support
           variables: {
             variable1: variable_content,
             variable2: variable_content
-          }
+          },
+          resource_changes: [
+            Support::Build.resource_change_content,
+            Support::Build.resource_change_content
+          ]
         }.merge(overrides)
       end
     end

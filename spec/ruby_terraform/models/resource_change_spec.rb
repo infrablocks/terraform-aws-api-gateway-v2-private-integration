@@ -74,6 +74,33 @@ describe RubyTerraform::Models::ResourceChange do
     end
   end
 
+  describe '#index' do
+    it 'returns nil when resource change is not for a multi-instance '\
+       'resource' do
+      resource_change = described_class.new(
+        Support::Build.resource_change_content(
+          {},
+          { multi_instance_resource: false }
+        )
+      )
+
+      expect(resource_change.index).to(be_nil)
+    end
+
+    it 'returns the index when resource change is for a multi-instance '\
+       'resource' do
+      index = 2
+      resource_change = described_class.new(
+        Support::Build.resource_change_content(
+          { index: },
+          { multi_instance_resource: true }
+        )
+      )
+
+      expect(resource_change.index).to(eq(index))
+    end
+  end
+
   describe '#provider_name' do
     it 'returns the provider name of the resource' do
       provider_name = 'some_provider'

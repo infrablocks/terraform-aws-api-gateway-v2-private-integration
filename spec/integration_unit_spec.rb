@@ -2,54 +2,6 @@
 
 require 'spec_helper'
 
-RSpec::Matchers.define :include_resource_creation do |type|
-  match do |plan|
-    resource_changes = plan.find_resource_changes_by_type(type)
-    resource_creations = resource_changes.filter(&:create?)
-
-    return false if @count && resource_creations.length != @count
-    return false if resource_creations.empty?
-
-    pp plan.to_h
-
-    if @arguments
-      return resource_creations.any? do |resource_creation|
-        @arguments.all? do |name, value|
-          resource_creation.change.after[name] == value
-        end
-      end
-    end
-
-    return true
-  end
-
-  chain :count do |count|
-    @count = count
-  end
-
-  chain :with_argument_value do |name, value|
-    @arguments = (@arguments || {}).merge(name => value)
-  end
-
-  failure_message do |plan|
-    resource_creations = plan.resource_creations.map do |resource_creation|
-      "#{resource_creation.type}.#{resource_creation.name}"
-    end
-    "\nexpected: a plan with a resource creation for type: #{type}" \
-      "\n     got: a plan with resource creations:" \
-      "\n            - #{resource_creations.join("\n            - ")}"
-  end
-
-  failure_message_when_negated do |plan|
-    resource_creations = plan.resource_creations.map do |resource_creation|
-      "#{resource_creation.type}.#{resource_creation.name}"
-    end
-    "\nexpected: a plan without a resource creation for type: #{type}" \
-      "\n     got: a plan with resource creations:" \
-      "\n            - #{resource_creations.join("\n            - ")}"
-  end
-end
-
 describe 'integration' do
   let(:alb_listeners) do
     output(:prerequisites, 'alb_listeners')
@@ -77,46 +29,43 @@ describe 'integration' do
     end
 
     fit 'creates a single integration' do
-      require 'pp'
-      pp subject.to_h
-      # expect(subject)
-      #   .to(include_resource_creation('aws_apigatewayv2_integration')
-      #         .count(1))
+      expect(subject)
+        .to(include_resource_creation(type: 'aws_apigatewayv2_integration'))
     end
 
     # it 'uses an integration type of HTTP_PROXY' do
     #   expect(subject)
-    #     .to(include_resource_creation('aws_apigatewayv2_integration',
-    #                                   'integration')
-    #           .with_argument_value(:integration_type, 'HTTP_PROXY'))
+    #     .to(include_resource_creation(type: 'aws_apigatewayv2_integration',
+    #                                   name: 'integration')
+    #           .with_attribute_value(:integration_type, 'HTTP_PROXY'))
     # end
     #
     # it 'uses an integration method of ANY' do
     #   expect(subject)
     #     .to(include_resource_creation('aws_apigatewayv2_integration',
     #                                   'integration')
-    #           .with_argument_value(:integration_method, 'ANY'))
+    #           .with_attribute_value(:integration_method, 'ANY'))
     # end
     #
     # it 'uses the provided integration URI' do
     #   expect(subject)
     #     .to(include_resource_creation('aws_apigatewayv2_integration',
     #                                   'integration')
-    #           .with_argument_value(:integration_uri, integration_uri))
+    #           .with_attribute_value(:integration_uri, integration_uri))
     # end
     #
     # it 'uses a connection type of VPC_LINK' do
     #   expect(subject)
     #     .to(include_resource_creation('aws_apigatewayv2_integration',
     #                                   'integration')
-    #           .with_argument_value(:connection_type, 'VPC_LINK'))
+    #           .with_attribute_value(:connection_type, 'VPC_LINK'))
     # end
-
+    #
     # it 'uses the created VPC link' do
     #   expect(subject)
     #     .to(include_resource_creation('aws_apigatewayv2_integration',
     #                                   'integration')
-    #           .with_argument_reference(:connection_id, output_vpc_link_id))
+    #           .with_attribute_reference(:connection_id, output_vpc_link_id))
     # end
 
     # it '' do
