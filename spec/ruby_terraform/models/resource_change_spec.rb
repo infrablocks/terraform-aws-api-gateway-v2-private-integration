@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+
 require_relative '../../support/random'
 require_relative '../../support/build'
 

@@ -3,7 +3,7 @@
 module RSpec
   module Terraform
     module Matchers
-      class IncludeResourceCreation
+      class IncludeResourceChange
         attr_reader :definition
 
         def initialize(definition = {})
@@ -11,7 +11,7 @@ module RSpec
         end
 
         def matches?(plan)
-          !plan.resource_creations_matching(definition).empty?
+          !plan.resource_changes_matching(definition).empty?
         end
       end
     end
