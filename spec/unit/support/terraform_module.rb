@@ -5,7 +5,7 @@ require 'ostruct'
 require 'fileutils'
 require 'securerandom'
 
-require_relative '../../lib/configuration'
+require_relative '../../lib/ib/configuration'
 
 module TerraformModule
   class << self

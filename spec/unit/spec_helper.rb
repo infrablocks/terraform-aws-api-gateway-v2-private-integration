@@ -1,14 +1,15 @@
 # frozen_string_literal: true
-
 require 'bundler/setup'
+
 require 'ruby_terraform'
+require 'rspec/terraform'
 
 require 'support/shared_contexts/terraform'
 require 'support/terraform_module'
-require 'support/rspec/terraform'
 
-RTM = RubyTerraform::Models
-V = RTM::Values
+Dir[File.join(__dir__, 'support', '**', '*.rb')]
+  .sort
+  .each { |f| require f }
 
 RubyTerraform.configure do |c|
   logger = Logger.new($stdout)
@@ -22,6 +23,13 @@ RubyTerraform.configure do |c|
   )
   c.logger = logger
 end
+
+RSpec::Matchers.define_negated_matcher(
+  :be_non_nil, :be_nil
+)
+RSpec::Matchers.define_negated_matcher(
+  :a_non_nil_value, :a_nil_value
+)
 
 RSpec.configure do |config|
   config.filter_run_when_matching :focus
