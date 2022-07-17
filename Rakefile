@@ -29,6 +29,7 @@ end
 
 task default: %i[
   test:code:fix
+  test:unit
   test:integration
 ]
 
@@ -166,7 +167,15 @@ namespace :test do
     task fix: [:'rubocop:autocorrect']
   end
 
-  RSpec::Core::RakeTask.new(integration: ['terraform:ensure']) do
+  desc 'Run module unit tests'
+  RSpec::Core::RakeTask.new(unit: ['terraform:ensure']) do |t|
+    t.pattern = 'spec/unit/**{,/*/**}/*_spec.rb'
+  end
+
+  desc 'Run module integration tests'
+  RSpec::Core::RakeTask.new(integration: ['terraform:ensure']) do |t|
+    t.pattern = 'spec/unit/**{,/*/**}/*_spec.rb'
+
     plugin_cache_directory =
       "#{Paths.project_root_directory}/vendor/terraform/plugins"
 
