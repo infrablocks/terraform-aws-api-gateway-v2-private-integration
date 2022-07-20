@@ -5,8 +5,9 @@ require 'ostruct'
 require 'fileutils'
 require 'securerandom'
 
-require_relative '../../lib/ib/configuration'
+require_relative '../../../lib/configuration'
 
+# rubocop:disable Metrics/ModuleLength
 module TerraformModule
   class << self
     def configuration
@@ -130,7 +131,7 @@ module TerraformModule
 
     def log_action(action, configuration)
       puts
-      puts "#{action.to_s.capitalize} with deployment identifier: "\
+      puts "#{action.to_s.capitalize} with deployment identifier: " \
            "#{configuration.deployment_identifier}"
       puts
     end
@@ -140,3 +141,4 @@ module TerraformModule
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength

@@ -25,7 +25,8 @@ module RSpec
 
     def plan(role, overrides = nil, &)
       RubyTerraform::Models::Plan.new(
-        TerraformModule.plan(role, overrides, &))
+        TerraformModule.plan(role, overrides, &)
+      )
     end
 
     def provision(role, overrides = nil, &)

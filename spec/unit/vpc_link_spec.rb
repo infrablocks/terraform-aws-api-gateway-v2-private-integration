@@ -6,25 +6,6 @@ describe 'VPC link' do
   let(:component) { vars(:root).component }
   let(:deployment_identifier) { vars(:root).deployment_identifier }
 
-  let(:subnet_ids) do
-    output(:prerequisites, 'private_subnet_ids')
-  end
-
-  let(:output_vpc_link_id) do
-    output(:root, 'vpc_link_id')
-  end
-
-  let(:vpc_links) do
-    api_gateway_v2_client.get_vpc_links.items
-  end
-
-  let(:created_vpc_link) do
-    vpc_links
-      .select { |link| link.subnet_ids.to_set == subnet_ids.to_set }
-      .reject { |link| link.name =~ /.*provided.*/ }
-      .first
-  end
-
   describe 'by default' do
     let(:vpc_link_subnet_ids) do
       output(:prerequisites, 'private_subnet_ids')
@@ -50,7 +31,9 @@ describe 'VPC link' do
     it 'uses the provided subnet IDs for the the VPC link' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_apigatewayv2_vpc_link')
-              .with_attribute_value(:subnet_ids, vpc_link_subnet_ids)
+              .with_attribute_value(
+                :subnet_ids,
+                containing_exactly(*vpc_link_subnet_ids)))
     end
 
     it 'uses a name including the component and deployment identifier' do
@@ -59,14 +42,15 @@ describe 'VPC link' do
               .with_attribute_value(
                 :name,
                 matching(/.*#{component}.*/)
-                  .and(matching(/.*#{deployment_identifier}.*/)
+                  .and(matching(/.*#{deployment_identifier}.*/))
+              ))
     end
 
-#     it 'outputs the VPC link ID' do
-#       expect(@plan)
-#         .to(include_output('vpc_link_id')
-#               .with_reference([???]))
-#     end
+    #     it 'outputs the VPC link ID' do
+    #       expect(@plan)
+    #         .to(include_output('vpc_link_id')
+    #               .with_reference([???]))
+    #     end
 
     it 'uses the component and deployment identifier as tags' do
       expect(@plan)
@@ -74,10 +58,10 @@ describe 'VPC link' do
               .with_attribute_value(
                 :tags,
                 {
-                  'Component' => component,
-                  'DeploymentIdentifier' => deployment_identifier
+                  Component: component,
+                  DeploymentIdentifier: deployment_identifier
                 }
-              )
+              ))
     end
   end
 
@@ -95,11 +79,15 @@ describe 'VPC link' do
     it 'does not create a VPC link' do
       expect(@plan)
         .not_to(include_resource_creation(type: 'aws_apigatewayv2_vpc_link')
-              .once)
+                  .once)
     end
   end
 
   describe 'when include_vpc_link is true' do
+    let(:vpc_link_subnet_ids) do
+      output(:prerequisites, 'private_subnet_ids')
+    end
+
     before(:context) do
       @plan = plan(:root) do |vars|
         vars.merge(
@@ -121,14 +109,17 @@ describe 'VPC link' do
     it 'uses the provided subnet IDs for the the VPC link' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_apigatewayv2_vpc_link')
-              .with_attribute_value(:subnet_ids, vpc_link_subnet_ids)
+              .with_attribute_value(
+                :subnet_ids,
+                containing_exactly(*vpc_link_subnet_ids)
+              ))
     end
 
-#     it 'outputs the VPC link ID' do
-#       expect(@plan)
-#         .to(include_output('vpc_link_id')
-#               .with_reference([???]))
-#     end
+    #     it 'outputs the VPC link ID' do
+    #       expect(@plan)
+    #         .to(include_output('vpc_link_id')
+    #               .with_reference([???]))
+    #     end
 
     it 'uses a name including the component and deployment identifier' do
       expect(@plan)
@@ -136,7 +127,8 @@ describe 'VPC link' do
               .with_attribute_value(
                 :name,
                 matching(/.*#{component}.*/)
-                  .and(matching(/.*#{deployment_identifier}.*/)
+                  .and(matching(/.*#{deployment_identifier}.*/))
+              ))
     end
 
     it 'uses the component and deployment identifier as tags' do
@@ -145,10 +137,10 @@ describe 'VPC link' do
               .with_attribute_value(
                 :tags,
                 {
-                  'Component' => component,
-                  'DeploymentIdentifier' => deployment_identifier
+                  Component: component,
+                  DeploymentIdentifier: deployment_identifier
                 }
-              )
+              ))
     end
   end
 
@@ -171,12 +163,12 @@ describe 'VPC link' do
               .with_attribute_value(
                 :tags,
                 {
-                  'Component' => component,
-                  'DeploymentIdentifier' => deployment_identifier,
-                  'Alpha' => 'beta',
-                  'Gamma' => 'delta'
+                  Component: component,
+                  DeploymentIdentifier: deployment_identifier,
+                  Alpha: 'beta',
+                  Gamma: 'delta'
                 }
-              )
+              ))
     end
   end
 
@@ -201,11 +193,11 @@ describe 'VPC link' do
                 :tags,
                 including(
                   {
-                    'Alpha' => 'beta',
-                    'Gamma' => 'delta'
+                    Alpha: 'beta',
+                    Gamma: 'delta'
                   }
                 )
-              )
+              ))
     end
 
     it 'does not include the default tags' do
@@ -215,11 +207,11 @@ describe 'VPC link' do
                     :tags,
                     including(
                       {
-                        'Component' => component,
-                        'DeploymentIdentifier' => deployment_identifier
+                        Component: component,
+                        DeploymentIdentifier: deployment_identifier
                       }
                     )
-                  )
+                  ))
     end
   end
 
@@ -243,12 +235,12 @@ describe 'VPC link' do
               .with_attribute_value(
                 :tags,
                 {
-                  'Component' => component,
-                  'DeploymentIdentifier' => deployment_identifier,
-                  'Alpha' => 'beta',
-                  'Gamma' => 'delta'
+                  Component: component,
+                  DeploymentIdentifier: deployment_identifier,
+                  Alpha: 'beta',
+                  Gamma: 'delta'
                 }
-              )
+              ))
     end
   end
 
@@ -272,11 +264,11 @@ describe 'VPC link' do
                     :tags,
                     including(
                       {
-                        'Component' => component,
-                        'DeploymentIdentifier' => deployment_identifier
+                        Component: component,
+                        DeploymentIdentifier: deployment_identifier
                       }
                     )
-                  )
+                  ))
     end
   end
 
@@ -300,11 +292,11 @@ describe 'VPC link' do
                 :tags,
                 including(
                   {
-                    'Component' => component,
-                    'DeploymentIdentifier' => deployment_identifier
+                    Component: component,
+                    DeploymentIdentifier: deployment_identifier
                   }
                 )
-              )
+              ))
     end
   end
 end

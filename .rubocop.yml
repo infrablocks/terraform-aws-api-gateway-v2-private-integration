@@ -26,6 +26,9 @@ RSpec/ExampleLength:
 RSpec/DescribeClass:
   Enabled: false
 
+RSpec/InstanceVariable:
+  Enabled: false
+
 RSpec/BeforeAfterAll:
   Enabled: false
 
