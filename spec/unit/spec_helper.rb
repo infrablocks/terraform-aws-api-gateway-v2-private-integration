@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'bundler/setup'
 
 require 'ruby_terraform'
@@ -8,7 +9,6 @@ require 'support/shared_contexts/terraform'
 require 'support/terraform_module'
 
 Dir[File.join(__dir__, 'support', '**', '*.rb')]
-  .sort
   .each { |f| require f }
 
 RubyTerraform.configure do |c|
@@ -40,10 +40,10 @@ RSpec.configure do |config|
 
   config.include_context 'terraform'
 
-  # config.before(:suite) do
-  #   TerraformModule.provision(:prerequisites)
-  # end
-  # config.after(:suite) do
-  #   TerraformModule.destroy(:prerequisites)
-  # end
+  config.before(:suite) do
+    TerraformModule.provision(:prerequisites)
+  end
+  config.after(:suite) do
+    TerraformModule.destroy(:prerequisites)
+  end
 end

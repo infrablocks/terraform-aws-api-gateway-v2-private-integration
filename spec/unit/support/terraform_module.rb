@@ -5,8 +5,9 @@ require 'ostruct'
 require 'fileutils'
 require 'securerandom'
 
-require_relative '../../lib/ib/configuration'
+require_relative '../../../lib/configuration'
 
+# rubocop:disable Metrics/ModuleLength
 module TerraformModule
   class << self
     def configuration
@@ -140,3 +141,4 @@ module TerraformModule
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength

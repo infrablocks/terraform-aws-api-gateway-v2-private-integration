@@ -1,5 +1,5 @@
 ---
-source_directory: "spec/infra/root"
+source_directory: "spec/unit/infra/root"
 state_file: "%{hiera('project_directory')}/state/root.tfstate"
 vars:
   region: "%{hiera('region')}"

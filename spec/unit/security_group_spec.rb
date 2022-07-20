@@ -45,20 +45,20 @@ describe 'VPC link default security group' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'ingress')
-              .with_attribute_value(:protocol, 'TCP')
+              .with_attribute_value(:protocol, 'tcp')
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '443')
-              .with_attribute_value(:to_port, '443')
+              .with_attribute_value(:from_port, 443)
+              .with_attribute_value(:to_port, 443))
     end
 
     it 'allows egress access on all ports to all IPs' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'egress')
-              .with_attribute_value(:protocol, 'all')
+              .with_attribute_value(:protocol, "-1")
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '-1')
-              .with_attribute_value(:to_port, '-1')
+              .with_attribute_value(:from_port, -1)
+              .with_attribute_value(:to_port, -1))
     end
 
     it 'uses the component and deployment identifier as tags' do
@@ -70,7 +70,7 @@ describe 'VPC link default security group' do
                   'Component' => component,
                   'DeploymentIdentifier' => deployment_identifier
                 }
-              )
+              ))
     end
   end
 
@@ -174,20 +174,20 @@ describe 'VPC link default security group' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'ingress')
-              .with_attribute_value(:protocol, 'TCP')
+              .with_attribute_value(:protocol, 'tcp')
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '443')
-              .with_attribute_value(:to_port, '443')
+              .with_attribute_value(:from_port, 443)
+              .with_attribute_value(:to_port, 443))
     end
 
     it 'allows egress access on all ports to all IPs' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'egress')
-              .with_attribute_value(:protocol, 'all')
+              .with_attribute_value(:protocol, "-1")
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '-1')
-              .with_attribute_value(:to_port, '-1')
+              .with_attribute_value(:from_port, -1)
+              .with_attribute_value(:to_port, -1))
     end
 
     it 'uses the component and deployment identifier as tags' do
@@ -199,7 +199,7 @@ describe 'VPC link default security group' do
                   'Component' => component,
                   'DeploymentIdentifier' => deployment_identifier
                 }
-              )
+              ))
     end
   end
 
@@ -267,20 +267,20 @@ describe 'VPC link default security group' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'ingress')
-              .with_attribute_value(:protocol, 'TCP')
+              .with_attribute_value(:protocol, 'tcp')
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '443')
-              .with_attribute_value(:to_port, '443')
+              .with_attribute_value(:from_port, 443)
+              .with_attribute_value(:to_port, 443))
     end
 
     it 'allows egress access on all ports to all IPs' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'egress')
-              .with_attribute_value(:protocol, 'all')
+              .with_attribute_value(:protocol, "-1")
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '-1')
-              .with_attribute_value(:to_port, '-1')
+              .with_attribute_value(:from_port, -1)
+              .with_attribute_value(:to_port, -1))
     end
 
     it 'uses the component and deployment identifier as tags' do
@@ -292,7 +292,7 @@ describe 'VPC link default security group' do
                   'Component' => component,
                   'DeploymentIdentifier' => deployment_identifier
                 }
-              )
+              ))
     end
   end
 
@@ -321,9 +321,8 @@ describe 'VPC link default security group' do
     it 'has no ingress rule' do
       expect(@plan)
         .not_to(include_resource_creation(type: 'aws_security_group_rule')
-              .with_attribute_value(:type, 'ingress')
-              # .with_attribute_reference(:security_group_id, ...)
-              )
+                  .with_attribute_value(:type, 'ingress'))
+      # .with_attribute_reference(:security_group_id, ...)
     end
   end
 
@@ -361,10 +360,10 @@ describe 'VPC link default security group' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'ingress')
-              .with_attribute_value(:protocol, 'TCP')
+              .with_attribute_value(:protocol, 'tcp')
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '443')
-              .with_attribute_value(:to_port, '443')
+              .with_attribute_value(:from_port, 443)
+              .with_attribute_value(:to_port, 443))
     end
   end
 
@@ -393,9 +392,8 @@ describe 'VPC link default security group' do
     it 'has no egress rule' do
       expect(@plan)
         .not_to(include_resource_creation(type: 'aws_security_group_rule')
-              .with_attribute_value(:type, 'egress')
-              # .with_attribute_reference(:security_group_id, ...)
-              )
+                  .with_attribute_value(:type, 'egress'))
+      # .with_attribute_reference(:security_group_id, ...)
     end
   end
 
@@ -433,10 +431,10 @@ describe 'VPC link default security group' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_security_group_rule')
               .with_attribute_value(:type, 'egress')
-              .with_attribute_value(:protocol, 'all')
+              .with_attribute_value(:protocol, "-1")
               .with_attribute_value(:cidr_blocks, ['0.0.0.0/0'])
-              .with_attribute_value(:from_port, '-1')
-              .with_attribute_value(:to_port, '-1')
+              .with_attribute_value(:from_port, -1)
+              .with_attribute_value(:to_port, -1))
     end
   end
 
@@ -460,12 +458,12 @@ describe 'VPC link default security group' do
               .with_attribute_value(
                 :tags,
                 {
-                  'Component' => component,
-                  'DeploymentIdentifier' => deployment_identifier,
-                  'Alpha' => 'beta',
-                  'Gamma' => 'delta'
+                  Component: component,
+                  DeploymentIdentifier: deployment_identifier,
+                  Alpha: 'beta',
+                  Gamma: 'delta'
                 }
-              )
+              ))
     end
   end
 
@@ -491,25 +489,25 @@ describe 'VPC link default security group' do
                 :tags,
                 including(
                   {
-                    'Alpha' => 'beta',
-                    'Gamma' => 'delta'
+                    Alpha: 'beta',
+                    Gamma: 'delta'
                   }
                 )
-              )
+              ))
     end
 
     it 'does not include the default tags' do
       expect(@plan)
         .not_to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value(
-                :tags,
-                including(
-                  {
-                    'Component' => component,
-                    'DeploymentIdentifier' => deployment_identifier
-                  }
-                )
-              )
+                  .with_attribute_value(
+                    :tags,
+                    including(
+                      {
+                        Component: component,
+                        DeploymentIdentifier: deployment_identifier
+                      }
+                    )
+                  ))
     end
   end
 
@@ -534,12 +532,12 @@ describe 'VPC link default security group' do
               .with_attribute_value(
                 :tags,
                 {
-                  'Component' => component,
-                  'DeploymentIdentifier' => deployment_identifier,
-                  'Alpha' => 'beta',
-                  'Gamma' => 'delta'
+                  Component: component,
+                  DeploymentIdentifier: deployment_identifier,
+                  Alpha: 'beta',
+                  Gamma: 'delta'
                 }
-              )
+              ))
     end
   end
 
@@ -560,15 +558,15 @@ describe 'VPC link default security group' do
     it 'does not include default tags' do
       expect(@plan)
         .not_to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value(
-                :tags,
-                including(
-                  {
-                    'Component' => component,
-                    'DeploymentIdentifier' => deployment_identifier
-                  }
-                )
-              )
+                  .with_attribute_value(
+                    :tags,
+                    including(
+                      {
+                        Component: component,
+                        DeploymentIdentifier: deployment_identifier
+                      }
+                    )
+                  ))
     end
   end
 
@@ -593,11 +591,11 @@ describe 'VPC link default security group' do
                 :tags,
                 including(
                   {
-                    'Component' => component,
-                    'DeploymentIdentifier' => deployment_identifier
+                    Component: component,
+                    DeploymentIdentifier: deployment_identifier
                   }
                 )
-              )
+              ))
     end
   end
 end
