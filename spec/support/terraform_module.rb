@@ -91,7 +91,7 @@ module TerraformModule
 
     def log_action(action, configuration)
       puts
-      puts "#{action.to_s.capitalize} with deployment identifier: "\
+      puts "#{action.to_s.capitalize} with deployment identifier: " \
            "#{configuration.deployment_identifier}"
       puts
     end
