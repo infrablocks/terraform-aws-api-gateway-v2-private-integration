@@ -3,6 +3,7 @@
 require 'bundler/setup'
 
 require 'ruby_terraform'
+require 'rspec'
 require 'rspec/terraform'
 
 require 'support/shared_contexts/awspec'
@@ -29,17 +30,10 @@ RSpec::Matchers.define_negated_matcher(
   :a_non_nil_value, :a_nil_value
 )
 
-class RSpec::Core::ExampleGroup
-  extend RSpec::Terraform::Helpers
-  include RSpec::Terraform::Helpers
-end
-
 RSpec.configure do |config|
   config.filter_run_when_matching :focus
   config.example_status_persistence_file_path = '.rspec_status'
-  config.expect_with :rspec do |c|
-    c.syntax = :expect
-  end
+  config.expect_with(:rspec) { |c| c.syntax = :expect }
 
   config.terraform_binary = Paths.from_project_root_directory(
     'vendor', 'terraform', 'bin', 'terraform'
@@ -61,10 +55,8 @@ RSpec.configure do |config|
 
   config.include_context 'awspec'
 
-  config.before(:suite) do
+  config.before(:suite) {
     apply(role: :prerequisites)
-  end
-  config.after(:suite) do
-    destroy(role: :prerequisites)
-  end
+  }
+  config.after(:suite) { destroy(role: :prerequisites) }
 end
