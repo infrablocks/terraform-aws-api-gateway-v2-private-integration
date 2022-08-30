@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'confidante'
 require 'git'
 require 'rake_circle_ci'
 require 'rake_github'
@@ -12,10 +13,10 @@ require 'securerandom'
 require 'semantic'
 require 'yaml'
 
-require_relative 'lib/configuration'
+require_relative 'lib/paths'
 require_relative 'lib/version'
 
-configuration = Configuration.new
+configuration = Confidante.configuration
 
 def repo
   Git.open(Pathname.new('.'))
@@ -203,7 +204,8 @@ namespace :deployment do
       argument_names: [:deployment_identifier]
     ) do |t, args|
       deployment_configuration =
-        configuration.for(:prerequisites, args)
+        configuration
+          .for_scope(args.merge(role: :prerequisites))
 
       t.source_directory = deployment_configuration.source_directory
       t.work_directory = deployment_configuration.work_directory
@@ -218,7 +220,9 @@ namespace :deployment do
       configuration_name: 'root',
       argument_names: [:deployment_identifier]
     ) do |t, args|
-      deployment_configuration = configuration.for(:root, args)
+      deployment_configuration =
+        configuration
+          .for_scope(args.merge(role: :root))
 
       t.source_directory = deployment_configuration.source_directory
       t.work_directory = deployment_configuration.work_directory
