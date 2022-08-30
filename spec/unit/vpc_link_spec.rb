@@ -3,22 +3,24 @@
 require 'spec_helper'
 
 describe 'VPC link' do
-  let(:component) { vars(:root).component }
-  let(:deployment_identifier) { vars(:root).deployment_identifier }
+  let(:component) do
+    var(role: :root, name: 'component')
+  end
+  let(:deployment_identifier) do
+    var(role: :root, name: 'deployment_identifier')
+  end
 
   describe 'by default' do
     let(:vpc_link_subnet_ids) do
-      output(:prerequisites, 'private_subnet_ids')
+      output(role: :prerequisites, name: 'private_subnet_ids')
     end
 
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
       end
     end
 
@@ -46,11 +48,12 @@ describe 'VPC link' do
               ))
     end
 
-    #     it 'outputs the VPC link ID' do
-    #       expect(@plan)
-    #         .to(include_output('vpc_link_id')
-    #               .with_reference([???]))
-    #     end
+    it 'outputs the VPC link ID' do
+      expect(@plan).to(
+        include_output(name: 'vpc_link_id')
+        #.with_reference([???])
+      )
+    end
 
     it 'uses the component and deployment identifier as tags' do
       expect(@plan)
@@ -67,12 +70,11 @@ describe 'VPC link' do
 
   describe 'when include_vpc_link is false' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          include_vpc_link: false,
-          vpc_link_id: output(:prerequisites, 'vpc_link_id'),
-          tls_server_name_to_verify: 'example.com'
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.include_vpc_link = false
+        vars.vpc_link_id =
+          output(role: :prerequisites, name: 'vpc_link_id')
+        vars.tls_server_name_to_verify = 'example.com'
       end
     end
 
@@ -85,18 +87,16 @@ describe 'VPC link' do
 
   describe 'when include_vpc_link is true' do
     let(:vpc_link_subnet_ids) do
-      output(:prerequisites, 'private_subnet_ids')
+      output(role: :prerequisites, name: 'private_subnet_ids')
     end
 
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          include_vpc_link: true,
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.include_vpc_link = true
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
       end
     end
 
@@ -115,11 +115,12 @@ describe 'VPC link' do
               ))
     end
 
-    #     it 'outputs the VPC link ID' do
-    #       expect(@plan)
-    #         .to(include_output('vpc_link_id')
-    #               .with_reference([???]))
-    #     end
+    it 'outputs the VPC link ID' do
+      expect(@plan)
+        .to(include_output(name: 'vpc_link_id')
+        #.with_reference([???])
+        )
+    end
 
     it 'uses a name including the component and deployment identifier' do
       expect(@plan)
@@ -146,14 +147,12 @@ describe 'VPC link' do
 
   describe 'when tags are provided and include_default_tags is not provided' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com',
-          tags: { Alpha: 'beta', Gamma: 'delta' }
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
+        vars.tags = { Alpha: 'beta', Gamma: 'delta' }
       end
     end
 
@@ -174,15 +173,13 @@ describe 'VPC link' do
 
   describe 'when tags are provided and include_default_tags is false' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com',
-          include_default_tags: false,
-          tags: { Alpha: 'beta', Gamma: 'delta' }
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
+        vars.include_default_tags = false
+        vars.tags = { Alpha: 'beta', Gamma: 'delta' }
       end
     end
 
@@ -217,15 +214,13 @@ describe 'VPC link' do
 
   describe 'when tags are provided and include_default_tags is true' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com',
-          include_default_tags: true,
-          tags: { Alpha: 'beta', Gamma: 'delta' }
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
+        vars.include_default_tags = true
+        vars.tags = { Alpha: 'beta', Gamma: 'delta' }
       end
     end
 
@@ -246,14 +241,12 @@ describe 'VPC link' do
 
   describe 'when include_default_tags is false' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com',
-          include_default_tags: false
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
+        vars.include_default_tags = false
       end
     end
 
@@ -274,14 +267,12 @@ describe 'VPC link' do
 
   describe 'when include_default_tags is true' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com',
-          include_default_tags: true
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
+        vars.include_default_tags = true
       end
     end
 

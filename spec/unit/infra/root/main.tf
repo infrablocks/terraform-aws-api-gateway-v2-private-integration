@@ -2,13 +2,12 @@ data "terraform_remote_state" "prerequisites" {
   backend = "local"
 
   config = {
-    path = "${path.module}/../../../../../state/prerequisites.tfstate"
+    path = "${path.module}/../../../../state/prerequisites.tfstate"
   }
 }
 
 module "private_integration" {
-  # This makes absolutely no sense. I think there's a bug in terraform.
-  source = "../../../../../../../.."
+  source = "../../../../"
 
   component             = var.component
   deployment_identifier = var.deployment_identifier

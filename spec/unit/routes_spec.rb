@@ -5,13 +5,11 @@ require 'spec_helper'
 describe 'routes' do
   describe 'by default' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
       end
     end
 

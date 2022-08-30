@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe 'integration' do
   let(:alb_listeners) do
-    output(:prerequisites, 'alb_listeners')
+    output(role: :prerequisites, name: 'alb_listeners')
   end
 
   let(:integration_uri) do
@@ -17,13 +17,11 @@ describe 'integration' do
 
   describe 'by default' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify: 'example.com'
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = 'example.com'
       end
     end
 
@@ -87,13 +85,11 @@ describe 'integration' do
 
   describe 'when use_tls is false' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          use_tls: false
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.use_tls = false
       end
     end
 
@@ -107,14 +103,11 @@ describe 'integration' do
 
   describe 'when use_tls is true' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          use_tls: true,
-          tls_server_name_to_verify:
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = tls_server_name_to_verify
       end
     end
 
@@ -138,25 +131,23 @@ describe 'integration' do
 
   describe 'when request_parameters are supplied' do
     before(:context) do
-      @plan = plan(:root) do |vars|
-        vars.merge(
-          vpc_id: output(:prerequisites, 'vpc_id'),
-          vpc_link_subnet_ids:
-            output(:prerequisites, 'private_subnet_ids'),
-          tls_server_name_to_verify:,
-          request_parameters: [
-            {
-              parameter: 'path',
-              type: 'overwrite',
-              value: '/some/path'
-            },
-            {
-              parameter: 'header.x-something',
-              type: 'append',
-              value: 'some-value'
-            }
-          ]
-        )
+      @plan = plan(role: :root) do |vars|
+        vars.vpc_id = output(role: :prerequisites, name: 'vpc_id')
+        vars.vpc_link_subnet_ids =
+          output(role: :prerequisites, name: 'private_subnet_ids')
+        vars.tls_server_name_to_verify = tls_server_name_to_verify
+        vars.request_parameters = [
+          {
+            parameter: 'path',
+            type: 'overwrite',
+            value: '/some/path'
+          },
+          {
+            parameter: 'header.x-something',
+            type: 'append',
+            value: 'some-value'
+          }
+        ]
       end
     end
 
