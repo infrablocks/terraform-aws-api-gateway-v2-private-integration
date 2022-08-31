@@ -2,25 +2,23 @@
 
 require 'bundler/setup'
 
-require 'ruby_terraform'
+require 'awspec'
 require 'rspec'
+require 'ruby_terraform'
 require 'rspec/terraform'
-
-require 'support/shared_contexts/awspec'
-
-require_relative '../../lib/paths'
 
 Dir[File.join(__dir__, 'support', '**', '*.rb')]
   .each { |f| require f }
 
 RubyTerraform.configure do |c|
-  logger = Logger.new($stdout)
+  logger = Logger.new(Logger::LogDevice.new('build/log'))
   logger.level = Logger::Severity::DEBUG
   logger.formatter = proc do |_, _, _, msg|
     "#{msg}\n"
   end
 
   c.logger = logger
+  c.stdout = logger
 end
 
 RSpec::Matchers.define_negated_matcher(
@@ -35,13 +33,16 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
   config.expect_with(:rspec) { |c| c.syntax = :expect }
 
-  config.terraform_binary = Paths.from_project_root_directory(
-    'vendor', 'terraform', 'bin', 'terraform'
-  )
+  config.include(Awspec::Helper::Finder)
+
+  config.terraform_binary = 'vendor/terraform/bin/terraform'
   config.terraform_configuration_provider =
     RSpec::Terraform::Configuration.chain_provider(
       providers: [
         RSpec::Terraform::Configuration.seed_provider,
+        RSpec::Terraform::Configuration.in_memory_provider(
+          no_color: true
+        ),
         RSpec::Terraform::Configuration.confidante_provider(
           parameters: %i[
             configuration_directory
@@ -53,10 +54,6 @@ RSpec.configure do |config|
       ]
     )
 
-  config.include_context 'awspec'
-
-  config.before(:suite) do
-    apply(role: :prerequisites)
-  end
+  config.before(:suite) { apply(role: :prerequisites) }
   config.after(:suite) { destroy(role: :prerequisites) }
 end
