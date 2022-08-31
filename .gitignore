@@ -28,5 +28,6 @@ run/logs/
 
 # Terraform
 .terraform
+*.tfplan
 *.tfstate
 *.tfstate.backup
