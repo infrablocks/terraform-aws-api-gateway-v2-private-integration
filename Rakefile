@@ -205,7 +205,7 @@ namespace :deployment do
     ) do |t, args|
       deployment_configuration =
         configuration
-          .for_scope(args.to_h.merge(role: :prerequisites))
+        .for_scope(args.to_h.merge(role: :prerequisites))
 
       t.source_directory = 'spec/unit/infra/prerequisites'
       t.work_directory = 'build/infra'
@@ -222,7 +222,7 @@ namespace :deployment do
     ) do |t, args|
       deployment_configuration =
         configuration
-          .for_scope(args.merge(role: :root))
+        .for_scope(args.merge(role: :root))
 
       t.source_directory = 'spec/unit/infra/root'
       t.work_directory = 'build/infra'

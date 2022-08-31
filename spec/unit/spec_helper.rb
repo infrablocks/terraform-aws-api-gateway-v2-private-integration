@@ -43,10 +43,10 @@ RSpec.configure do |config|
       providers: [
         RSpec::Terraform::Configuration.seed_provider,
         RSpec::Terraform::Configuration.confidante_provider(
-          parameters: [
-            :configuration_directory,
-            :state_file,
-            :vars
+          parameters: %i[
+            configuration_directory
+            state_file
+            vars
           ],
           scope_selector: ->(o) { o.slice(:role) }
         )
@@ -55,8 +55,8 @@ RSpec.configure do |config|
 
   config.include_context 'awspec'
 
-  config.before(:suite) {
+  config.before(:suite) do
     apply(role: :prerequisites)
-  }
+  end
   config.after(:suite) { destroy(role: :prerequisites) }
 end

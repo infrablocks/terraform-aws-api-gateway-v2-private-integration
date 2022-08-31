@@ -35,7 +35,8 @@ describe 'VPC link' do
         .to(include_resource_creation(type: 'aws_apigatewayv2_vpc_link')
               .with_attribute_value(
                 :subnet_ids,
-                containing_exactly(*vpc_link_subnet_ids)))
+                containing_exactly(*vpc_link_subnet_ids)
+              ))
     end
 
     it 'uses a name including the component and deployment identifier' do
@@ -51,7 +52,7 @@ describe 'VPC link' do
     it 'outputs the VPC link ID' do
       expect(@plan).to(
         include_output(name: 'vpc_link_id')
-        #.with_reference([???])
+        # .with_reference([???])
       )
     end
 
@@ -117,9 +118,8 @@ describe 'VPC link' do
 
     it 'outputs the VPC link ID' do
       expect(@plan)
-        .to(include_output(name: 'vpc_link_id')
-        #.with_reference([???])
-        )
+        .to(include_output(name: 'vpc_link_id'))
+      # .with_reference([???])
     end
 
     it 'uses a name including the component and deployment identifier' do
