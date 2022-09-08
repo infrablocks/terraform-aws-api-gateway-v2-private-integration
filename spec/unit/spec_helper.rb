@@ -6,20 +6,11 @@ require 'awspec'
 require 'rspec'
 require 'ruby_terraform'
 require 'rspec/terraform'
+require 'logger'
+require 'stringio'
 
 Dir[File.join(__dir__, 'support', '**', '*.rb')]
   .each { |f| require f }
-
-RubyTerraform.configure do |c|
-  logger = Logger.new(Logger::LogDevice.new('build/log'))
-  logger.level = Logger::Severity::DEBUG
-  logger.formatter = proc do |_, _, _, msg|
-    "#{msg}\n"
-  end
-
-  c.logger = logger
-  c.stdout = logger
-end
 
 RSpec::Matchers.define_negated_matcher(
   :be_non_nil, :be_nil
@@ -36,6 +27,8 @@ RSpec.configure do |config|
   config.include(Awspec::Helper::Finder)
 
   config.terraform_binary = 'vendor/terraform/bin/terraform'
+  config.terraform_log_file_path = 'build/terraform.log'
+  config.terraform_log_streams = [:file]
   config.terraform_configuration_provider =
     RSpec::Terraform::Configuration.chain_provider(
       providers: [

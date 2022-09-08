@@ -1409,10 +1409,10 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-support (3.11.1)
-    rspec-terraform (0.1.0.pre.38)
+    rspec-terraform (0.1.0.pre.43)
       confidante (>= 0.27)
       rspec (>= 3.0)
-      ruby-terraform (= 1.7.0.pre.16)
+      ruby-terraform (= 1.7.0.pre.17)
     rubocop (1.36.0)
       json (~> 2.3)
       parallel (~> 1.10)
@@ -1430,7 +1430,7 @@ GEM
     rubocop-rspec (2.13.2)
       rubocop (~> 1.33)
     ruby-progressbar (1.11.0)
-    ruby-terraform (1.7.0.pre.16)
+    ruby-terraform (1.7.0.pre.17)
       immutable-struct (~> 2.4)
       lino (~> 3.0)
     ruby2_keywords (0.0.5)
@@ -1480,7 +1480,7 @@ DEPENDENCIES
   rake_ssh
   rake_terraform
   rspec
-  rspec-terraform (= 0.1.0.pre.38)
+  rspec-terraform (= 0.1.0.pre.43)
   rubocop
   rubocop-rake
   rubocop-rspec
