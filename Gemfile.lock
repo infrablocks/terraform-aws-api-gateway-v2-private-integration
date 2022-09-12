@@ -1409,7 +1409,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-support (3.11.1)
-    rspec-terraform (0.1.0.pre.43)
+    rspec-terraform (0.1.0.pre.44)
       confidante (>= 0.27)
       rspec (>= 3.0)
       ruby-terraform (= 1.7.0.pre.17)
@@ -1480,7 +1480,7 @@ DEPENDENCIES
   rake_ssh
   rake_terraform
   rspec
-  rspec-terraform (= 0.1.0.pre.43)
+  rspec-terraform (= 0.1.0.pre.44)
   rubocop
   rubocop-rake
   rubocop-rspec

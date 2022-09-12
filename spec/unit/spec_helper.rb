@@ -47,6 +47,15 @@ RSpec.configure do |config|
       ]
     )
 
-  config.before(:suite) { apply(role: :prerequisites) }
-  config.after(:suite) { destroy(role: :prerequisites) }
+  config.before(:suite) do
+    apply(
+      role: :prerequisites
+    )
+  end
+  config.after(:suite) do
+    destroy(
+      role: :prerequisites,
+      only_if: -> { ENV['SEED'].nil? }
+    )
+  end
 end
