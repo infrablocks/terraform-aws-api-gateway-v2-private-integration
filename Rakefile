@@ -201,11 +201,12 @@ namespace :deployment do
   namespace :prerequisites do
     RakeTerraform.define_command_tasks(
       configuration_name: 'prerequisites',
-      argument_names: [:deployment_identifier]
+      argument_names: [:seed]
     ) do |t, args|
       deployment_configuration =
         configuration
-        .for_scope(args.to_h.merge(role: :prerequisites))
+        .for_scope(role: :prerequisites)
+        .for_overrides(args.to_h)
 
       t.source_directory = 'spec/unit/infra/prerequisites'
       t.work_directory = 'build/infra'
@@ -218,11 +219,12 @@ namespace :deployment do
   namespace :root do
     RakeTerraform.define_command_tasks(
       configuration_name: 'root',
-      argument_names: [:deployment_identifier]
+      argument_names: [:seed]
     ) do |t, args|
       deployment_configuration =
         configuration
-        .for_scope(args.merge(role: :root))
+        .for_scope(role: :root)
+        .for_overrides(args.to_h)
 
       t.source_directory = 'spec/unit/infra/root'
       t.work_directory = 'build/infra'
@@ -242,7 +244,7 @@ namespace :version do
     puts "Bumped version to #{next_tag}."
   end
 
-  desc 'Release gem'
+  desc 'Release module'
   task :release do
     next_tag = latest_tag.release!
     repo.add_tag(next_tag.to_s)
