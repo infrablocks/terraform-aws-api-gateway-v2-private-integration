@@ -86,6 +86,8 @@ jobs:
       - checkout
       - configure_tools
       - run: ./scripts/ci/steps/test.sh
+      - store_artifacts:
+          path: build/logs
       - notify
 
   prerelease:

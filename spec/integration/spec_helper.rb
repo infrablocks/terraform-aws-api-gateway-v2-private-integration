@@ -21,8 +21,7 @@ RSpec.configure do |config|
 
   config.terraform_binary = 'vendor/terraform/bin/terraform'
   config.terraform_log_file_path = 'build/logs/integration.log'
-  config.terraform_log_streams =
-    ENV['CI'] == 'true' ? %i[file standard] : [:file]
+  config.terraform_log_streams = [:file]
   config.terraform_configuration_provider =
     RSpec::Terraform::Configuration.chain_provider(
       providers: [
