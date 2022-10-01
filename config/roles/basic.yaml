@@ -1,0 +1,8 @@
+---
+configuration_directory: "%{cwd}/examples/basic"
+state_file: "%{cwd}/state/basic.tfstate"
+vars:
+  region: "%{hiera('region')}"
+
+  component: "%{hiera('component')}"
+  deployment_identifier: "%{hiera('deployment_identifier')}"

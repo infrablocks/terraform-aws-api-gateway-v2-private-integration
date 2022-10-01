@@ -12,13 +12,6 @@ require 'stringio'
 Dir[File.join(__dir__, 'support', '**', '*.rb')]
   .each { |f| require f }
 
-RSpec::Matchers.define_negated_matcher(
-  :be_non_nil, :be_nil
-)
-RSpec::Matchers.define_negated_matcher(
-  :a_non_nil_value, :a_nil_value
-)
-
 RSpec.configure do |config|
   config.filter_run_when_matching :focus
   config.example_status_persistence_file_path = '.rspec_status'
@@ -27,7 +20,7 @@ RSpec.configure do |config|
   config.include(Awspec::Helper::Finder)
 
   config.terraform_binary = 'vendor/terraform/bin/terraform'
-  config.terraform_log_file_path = 'build/logs/unit.log'
+  config.terraform_log_file_path = 'build/logs/integration.log'
   config.terraform_log_streams = [:file]
   config.terraform_configuration_provider =
     RSpec::Terraform::Configuration.chain_provider(
@@ -46,16 +39,4 @@ RSpec.configure do |config|
         )
       ]
     )
-
-  config.before(:suite) do
-    apply(
-      role: :prerequisites
-    )
-  end
-  config.after(:suite) do
-    destroy(
-      role: :prerequisites,
-      only_if: -> { ENV['SEED'].nil? }
-    )
-  end
 end
