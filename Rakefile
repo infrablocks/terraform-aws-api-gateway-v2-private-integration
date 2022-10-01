@@ -36,7 +36,7 @@ task default: %i[
 
 RakeTerraform.define_installation_tasks(
   path: File.join(Dir.pwd, 'vendor', 'terraform'),
-  version: '1.2.4'
+  version: '1.3.1'
 )
 
 namespace :encryption do
@@ -178,7 +178,6 @@ namespace :test do
 
     mkdir_p(plugin_cache_directory)
 
-    ENV['TF_PLUGIN_CACHE_DIR'] = plugin_cache_directory
     ENV['AWS_REGION'] = configuration.region
   end
 
@@ -192,7 +191,6 @@ namespace :test do
 
     mkdir_p(plugin_cache_directory)
 
-    ENV['TF_PLUGIN_CACHE_DIR'] = plugin_cache_directory
     ENV['AWS_REGION'] = configuration.region
   end
 end
