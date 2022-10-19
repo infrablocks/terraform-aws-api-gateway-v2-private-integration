@@ -173,11 +173,6 @@ namespace :test do
     t.pattern = 'spec/unit/**{,/*/**}/*_spec.rb'
     t.rspec_opts = '-I spec/unit'
 
-    plugin_cache_directory =
-      "#{Paths.project_root_directory}/vendor/terraform/plugins"
-
-    mkdir_p(plugin_cache_directory)
-
     ENV['AWS_REGION'] = configuration.region
   end
 
@@ -185,11 +180,6 @@ namespace :test do
   RSpec::Core::RakeTask.new(integration: ['terraform:ensure']) do |t|
     t.pattern = 'spec/integration/**{,/*/**}/*_spec.rb'
     t.rspec_opts = '-I spec/integration'
-
-    plugin_cache_directory =
-      "#{Paths.project_root_directory}/vendor/terraform/plugins"
-
-    mkdir_p(plugin_cache_directory)
 
     ENV['AWS_REGION'] = configuration.region
   end
