@@ -8,7 +8,10 @@ describe 'basic example' do
   end
 
   after(:context) do
-    destroy(role: :basic)
+    destroy(
+      role: :basic,
+      only_if: -> { !ENV['FORCE_DESTROY'].nil? || ENV['SEED'].nil? }
+    )
   end
 
   describe 'integration' do

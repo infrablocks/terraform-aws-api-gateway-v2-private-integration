@@ -2,7 +2,7 @@ data "aws_availability_zones" "zones" {}
 
 module "base_networking" {
   source  = "infrablocks/base-networking/aws"
-  version = "4.0.0"
+  version = "5.0.0"
 
   region             = var.region
   availability_zones = data.aws_availability_zones.zones.names
@@ -18,7 +18,7 @@ module "base_networking" {
 
 module "api_gateway" {
   source  = "infrablocks/api-gateway-v2/aws"
-  version = "1.0.0-rc.3"
+  version = "1.0.0"
 
   component             = var.component
   deployment_identifier = var.deployment_identifier
@@ -33,7 +33,7 @@ module "api_gateway" {
 
 module "application_load_balancer" {
   source  = "infrablocks/application-load-balancer/aws"
-  version = "3.1.0-rc.8"
+  version = "4.0.0"
 
   region     = var.region
   vpc_id     = module.base_networking.vpc_id

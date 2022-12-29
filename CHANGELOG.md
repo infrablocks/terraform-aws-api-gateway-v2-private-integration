@@ -1,12 +1,9 @@
-# Changelog
-All notable changes to this project will be documented in this file.
+## Unreleased
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## 1.0.0 (December 28th, 2022)
 
-## [Unreleased]
+IMPROVEMENTS
 
-### Added
-- 
-
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/HEAD
+* Configuration to manage a private integration has been added including an 
+  API Gateway integration, a set of API Gateway routes and optionally, a VPC 
+  link.

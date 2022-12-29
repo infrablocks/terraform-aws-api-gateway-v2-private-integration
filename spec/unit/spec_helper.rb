@@ -32,7 +32,9 @@ RSpec.configure do |config|
   config.terraform_configuration_provider =
     RSpec::Terraform::Configuration.chain_provider(
       providers: [
-        RSpec::Terraform::Configuration.seed_provider,
+        RSpec::Terraform::Configuration.seed_provider(
+          generator: -> { SecureRandom.hex[0, 8] }
+        ),
         RSpec::Terraform::Configuration.in_memory_provider(
           no_color: true
         ),
@@ -55,7 +57,7 @@ RSpec.configure do |config|
   config.after(:suite) do
     destroy(
       role: :prerequisites,
-      only_if: -> { ENV['SEED'].nil? }
+      only_if: -> { !ENV['FORCE_DESTROY'].nil? || ENV['SEED'].nil? }
     )
   end
 end

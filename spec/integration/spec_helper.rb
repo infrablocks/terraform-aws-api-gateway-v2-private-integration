@@ -25,7 +25,9 @@ RSpec.configure do |config|
   config.terraform_configuration_provider =
     RSpec::Terraform::Configuration.chain_provider(
       providers: [
-        RSpec::Terraform::Configuration.seed_provider,
+        RSpec::Terraform::Configuration.seed_provider(
+          generator: -> { SecureRandom.hex[0, 8] }
+        ),
         RSpec::Terraform::Configuration.in_memory_provider(
           no_color: true
         ),
