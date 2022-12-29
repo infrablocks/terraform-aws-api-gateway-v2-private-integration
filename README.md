@@ -30,7 +30,22 @@ module "private_integration" {
   source  = "infrablocks/api-gateway-v2-private-integration/aws"
   version = "1.0.0"
   
-  
+  component             = "private-service"
+  deployment_identifier = "production"
+
+  api_id                    = "xikuu6ijh7"
+  integration_uri           = "arn:aws:elasticloadbalancing:eu-west-2:123456789101:listener/app/private-service-load-balancer/75e05a504b289ab0/d8afe12df4121a4c"
+  tls_server_name_to_verify = "https://private-service.example.com"
+
+  routes = [{
+    route_key: "GET /"
+  }]
+
+  vpc_id              = "vpc-0926873795926a8c2"
+  vpc_link_subnet_ids = [
+    "subnet-0fc246023a98b4405",
+    "subnet-0f2dee31b2a4841ab"
+  ]
 }
 ```
 
