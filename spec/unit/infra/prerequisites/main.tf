@@ -82,7 +82,7 @@ module "application_load_balancer" {
       port            = "80"
       protocol        = "HTTP"
       certificate_arn = null,
-      ssl_policy      = null,
+      ssl_policy      = "",
       default_action  = {
         type             = "forward"
         target_group_key = "default"
