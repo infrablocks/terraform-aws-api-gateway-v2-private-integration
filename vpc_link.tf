@@ -2,7 +2,7 @@ module "api_gateway_vpc_link" {
   count = local.include_vpc_link == true ? 1 : 0
 
   source = "infrablocks/api-gateway-v2/aws//modules/vpc_link"
-  version = "1.0.0-rc.9"
+  version = "1.0.0"
 
   component = var.component
   deployment_identifier = var.deployment_identifier
