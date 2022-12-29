@@ -60,11 +60,12 @@ module "application_load_balancer" {
 
   target_groups = [
     {
-      key          = "default"
-      port         = 80
-      protocol     = "HTTP"
-      target_type  = "instance"
-      health_check = {
+      key                  = "default"
+      port                 = 80
+      protocol             = "HTTP"
+      target_type          = "instance"
+      deregistration_delay = 300
+      health_check         = {
         path                = "/health"
         port                = "traffic-port"
         protocol            = "HTTP"
