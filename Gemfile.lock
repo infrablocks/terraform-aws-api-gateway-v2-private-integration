@@ -1704,7 +1704,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.8-x86_64-linux-gnu)
+    nokogiri (1.18.8-x86_64-linux)
       racc (~> 1.4)
     octokit (8.1.0)
       base64
