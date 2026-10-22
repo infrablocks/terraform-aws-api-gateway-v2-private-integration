@@ -1,4 +1,6 @@
-data "aws_availability_zones" "zones" {}
+data "aws_availability_zones" "zones" {
+  exclude_zone_ids = ["euw2-az4"]
+}
 
 module "base_networking" {
   source  = "infrablocks/base-networking/aws"
